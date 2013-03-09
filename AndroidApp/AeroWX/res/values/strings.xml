@@ -3,6 +3,6 @@
 
     <string name="app_name">AeroWX</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="AeroWX">Aeronautical Weather in the Field</string>
 
 </resources>
