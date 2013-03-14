@@ -6,8 +6,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
+/**
+ * This class manages data coming from the METAR weather server.
+ * 
+ * @author Wayne Johnson
+ *
+ */
 public class METARData
 {
+	/* METAR Data */
 	/** Weather Station ID (4 letters) */
 	String wxid;
 
@@ -41,17 +50,32 @@ public class METARData
 	/** various optional remarks */
 	String remarks;
 
+	/**
+	 * Constructor for empty METARData
+	 */
 	public METARData()
 	{
 		super();
+		wind=new Wind();
+		visibility=new Visibility();
+		weather=new Weather();
+		clouds=new Clouds[0];
 	}
 
+	/**
+	 * Constructor to create METARData from JSONObject.
+	 * 
+	 * @param object JSON object from which to create METARData object.
+	 * 
+	 * @throws JSONException when JSON data is invalid.
+	 */
 	METARData(JSONObject object) throws JSONException
 	{
 		super();
 
 		try
 		{
+			// All these are required in a METAR message
 			wxid = object.getString("wxid");
 			time = object.getString("time");
 			temp = object.getString("temp");
@@ -87,6 +111,63 @@ public class METARData
 		return object;
 	}
 
+	/** 
+	 * Simple test to verify we can marshal/demarshal METAR data to/from JSON.
+	 * @throws Exception 
+	 * 
+	 */
+	static void testMetarData() throws Exception
+	{
+		METARData metarData=new METARData();
+		
+		metarData.wxid="kros";
+		metarData.time="19:00";
+		metarData.temp="27";
+		
+		JSONObject jsonMetarData = null;
+		try
+		{
+			jsonMetarData=metarData.toJSONObject();
+			Log.i(MetarActivity.class.toString(), jsonMetarData.toString());
+		} catch (JSONException e1)
+		{
+			// this shouldn't happen
+			throw e1;
+		}
+
+		// This should fail and generate a JSONException indicating "No value for dewpoint".
+		try
+		{
+			METARData newMetarData=new METARData(jsonMetarData);
+			Log.i(MetarActivity.class.toString(), newMetarData.toString());
+		} catch (JSONException e)
+		{
+			if (!e.getMessage().contains("dewpoint"))
+			{
+				throw new Exception("Failed to throw \"No value for dewpoint\"");
+			}
+		}
+		
+		metarData.dewpoint="25";
+		metarData.pressure="27.5";
+		metarData.obsType="auto";
+		metarData.wind.direction="90";
+		metarData.wind.speed="7";
+		
+		// This shouldn't fail with JSONException indicating "No value for gust".
+		try
+		{
+			METARData newMetarData=new METARData(jsonMetarData);
+			Log.i(MetarActivity.class.toString(), newMetarData.toString());
+		} catch (JSONException e)
+		{
+			if (e.getMessage().contains("gust"))
+			{
+				throw e;
+			}
+		}
+	}
+	
 	public String getWxid()
 	{
 		return wxid;
@@ -224,6 +305,10 @@ class Wind
 		gust = jsonObject.getString("gust");
 	}
 
+	public Wind()
+	{
+	}
+
 	public String getDirection()
 	{
 		return direction;
@@ -275,6 +360,11 @@ class Visibility
 		obscurity = jsonObject.getString("obscurity");
 	}
 
+	public Visibility()
+	{
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getDistance()
 	{
 		return distance;
@@ -322,6 +412,11 @@ class Weather
 		description = jsonObject.getString("description");
 		precipitation = jsonObject.getString("precipitation");
 		misc = jsonObject.getString("misc");
+	}
+
+	public Weather()
+	{
+		// TODO Auto-generated constructor stub
 	}
 
 	public String getIntensity()

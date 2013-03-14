@@ -30,9 +30,11 @@ import android.view.Menu;
 public class MetarActivity extends Activity
 {
 
+	// Temporary settings
 	String baseUrl = "http://aerowx.dccmn.com/get_weather";
 	String wxid = "kros";
 
+	/** Client to send out requests with */
 	HttpClient client = new DefaultHttpClient();
 
 	/**
@@ -44,33 +46,22 @@ public class MetarActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		METARData metarData=new METARData();
-		
-		metarData.wxid="kros";
-		metarData.time="19:00";
-		metarData.temp="27";
-		
+		// Test MetarData for now.
+
 		try
 		{
-			JSONObject metarJSON=metarData.toJSONObject();
-			Log.i(MetarActivity.class.toString(), metarJSON.toString());
-		} catch (JSONException e1)
+			METARData.testMetarData();
+		} catch (Exception e1)
 		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			Log.i(MetarActivity.class.toString(), e1.getMessage());
 		}
-		
+
 		try
 		{
 			readMETAR(baseUrl);
-		} catch (IOException e)
+		} catch (Exception e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.i(MetarActivity.class.toString(), e.getMessage());
 		}
 	}
 
@@ -84,7 +75,7 @@ public class MetarActivity extends Activity
 
 	public void readMETAR(String baseUrl) throws IOException, JSONException
 	{
-		Log.e(MetarActivity.class.toString(), "readMETAR(" + baseUrl);
+		Log.i(MetarActivity.class.toString(), "readMETAR(" + baseUrl);
 
 		JSONObject requestObject = new JSONObject();
 		requestObject.put("wxid", wxid);
@@ -92,8 +83,8 @@ public class MetarActivity extends Activity
 		requestObject.put("server", "Metar");
 
 		JSONObject responseArray = postJSON(baseUrl, requestObject);
-		
-		METARData metarData=new METARData(responseArray);
+
+		METARData metarData = new METARData(responseArray);
 	}
 
 	private JSONObject postJSON(String baseUrl, JSONObject requestObject)
