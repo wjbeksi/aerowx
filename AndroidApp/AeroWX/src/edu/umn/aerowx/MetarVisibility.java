@@ -24,7 +24,7 @@ public class MetarVisibility
 	public MetarVisibility(JSONObject jsonObject) throws JSONException
 	{
 		distance = jsonObject.getString("distance");
-		obscurity = jsonObject.getString("obscurity");
+		obscurity = jsonObject.optString("obscurity");
 	}
 
 	public Object toJSONObject() throws JSONException

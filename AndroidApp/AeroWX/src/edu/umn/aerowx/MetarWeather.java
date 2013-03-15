@@ -29,10 +29,10 @@ public class MetarWeather
 
 	public MetarWeather(JSONObject jsonObject) throws JSONException
 	{
-		intensity = jsonObject.getString("intensity");
-		description = jsonObject.getString("description");
-		precipitation = jsonObject.getString("precipitation");
-		misc = jsonObject.getString("misc");
+		intensity = jsonObject.optString("intensity");
+		description = jsonObject.optString("description");
+		precipitation = jsonObject.optString("precipitation");
+		misc = jsonObject.optString("misc");
 	}
 
 	public Object toJSONObject() throws JSONException

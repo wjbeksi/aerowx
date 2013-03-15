@@ -83,7 +83,7 @@ public class METARData
 			visibility = new MetarVisibility(object.getJSONObject("visibility"));
 			weather = new MetarWeather(object.getJSONObject("weather"));
 			clouds = MetarClouds.getCloudsArray(object.getJSONArray("clouds"));
-			remarks = object.getString("remarks");
+			remarks = object.optString("remarks");
 		} catch (JSONException e)
 		{
 			throw e;
