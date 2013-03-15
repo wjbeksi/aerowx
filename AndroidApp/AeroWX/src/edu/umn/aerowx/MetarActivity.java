@@ -46,15 +46,14 @@ public class MetarActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// Test MetarData for now.
-
-		try
-		{
-			METARData.testMetarData();
-		} catch (Exception e1)
-		{
-			Log.i(MetarActivity.class.toString(), e1.getMessage());
-		}
+// Test MetarData for now.
+//		try
+//		{
+//			METARData.testMetarData();
+//		} catch (Exception e1)
+//		{
+//			Log.i(MetarActivity.class.toString(), e1.getMessage());
+//		}
 
 		try
 		{
