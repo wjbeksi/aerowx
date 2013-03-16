@@ -73,24 +73,18 @@ public class METARData
 	{
 		super();
 
-		try
-		{
-			// All these are required in a METAR message
-			wxid = object.getString("wxid");
-			time = object.getString("time");
-			temp = object.getString("temp");
-			dewpoint = object.getString("dewpoint");
-			pressure = object.getString("pressure");
-			obsType = object.getString("type");
-			wind = new Wind(object.getJSONObject("wind"));
-			visibility = new Visibility(object.getJSONObject("visibility"));
-			weather = new Weather(object.getJSONObject("weather"));
-			clouds = getCloudsArray(object.getJSONArray("clouds"));
-			remarks = object.optString("remarks");
-		} catch (JSONException e)
-		{
-			throw e;
-		}
+		// All these are required in a METAR message
+		wxid = object.getString("wxid");
+		time = object.getString("time");
+		temp = object.getString("temp");
+		dewpoint = object.getString("dewpoint");
+		pressure = object.getString("pressure");
+		obsType = object.getString("type");
+		wind = new Wind(object.getJSONObject("wind"));
+		visibility = new Visibility(object.getJSONObject("visibility"));
+		weather = new Weather(object.getJSONObject("weather"));
+		clouds = getCloudsArray(object.getJSONArray("clouds"));
+		remarks = object.optString("remarks");
 	}
 
 	/**
