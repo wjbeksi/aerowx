@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="private" author="true" classpath="libs/android-support-v4.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" source="1.6" sourcefiles="src/edu/umn/aerowx/GFSMOSMAVData.java,src/edu/umn/aerowx/MetarActivity.java,src/edu/umn/aerowx/METARData.java,src/edu/umn/aerowx/Utils.java" sourcepath="src;gen" splitindex="false" use="true" version="true">
+            <link href="file:/C:/Program Files/adt-bundle-windows-x86_64/sdk/docs/reference"/>
+            <link href="file:/C:/Users/waynej/Documents/GitHub/aerowx/AndroidApp/AeroWX/doc/"/>
+        </javadoc>
+    </target>
+</project>
