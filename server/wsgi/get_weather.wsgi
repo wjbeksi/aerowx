@@ -1,31 +1,60 @@
 #!/usr/bin/env python
 
-import json
+import json, logging
+from logging import debug
+
+# enable debug prints 
+logging.basicConfig(level=logging.DEBUG)
 
 ###################################################################
 # TODO ### define Supporting API
 ###################################################################
-def CacheLookup():
-    pass
+def CacheLookup(client_req):
+    return None
 
 
 def CacheInsertion():
     pass
 
-
-def ExternalRequest():
-    pass
-
-
 def ResponseParser():
     pass
 
+# TODO: break out into explicit parameters?
+def ExternalRequest(client_req):
+    pass
 
+
+# Validate all required fields of a client request
+# client_req = [{
+#    "source"   : "",  # Weather service to use
+#    "location" : "",  # Weather station ID 
+#    "datetime" : "",  # Date & time to get weather info for
+# }]
+def ValidateClientRequest(client_req):
+    return True
+
+def ClientRequestHandler(client_req):
+    response = []
+
+    # validate client_req
+    if(ValidateClientRequest(client_req)):
+        # look up request in cache
+        cacheHit = CacheLookup(client_req)
+        if cacheHit != None:
+            response = cacheHit
+        else:
+            # pass on client_req to correct handler if no cache hit
+            response = ExternalRequest(client_req)
+    else:
+        response = [{"error": "invalid request"}]
+
+    return response
 
 ###################################################################
 # Application Entry Point
 ###################################################################
 def application(environ, start_response):
+    client_req = [{"error": "invalid request"}]
     try:
         request_body_size = int(environ.get('CONTENT_LENGTH', 0))
     except ValueError:
@@ -36,20 +65,18 @@ def application(environ, start_response):
         try:
             request_body = environ['wsgi.input'].read(request_body_size)
             
-            data = json.loads(request_body)
-            print data
+            client_req = json.loads(request_body)
+            debug(client_req)
         except:
-            print "Error parsing JSON input"
+            debug("Error parsing JSON input")
     else:
-        print "No JSON input"
+        debug("No JSON input")
 
     # Request weather data update (from cache, then web)
-    output = [{"Text": "Hello World!"}]
-
-
+    response = ClientRequestHandler(client_req)
 
     # Construct JSON response
-    response_body = json.dumps(output)
+    response_body = json.dumps(response)
     status = '200 OK'
     response_headers = [('Content-type', 'application/json'),
                         ('Content-Length', str(len(response_body)))]
