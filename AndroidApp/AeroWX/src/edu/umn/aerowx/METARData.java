@@ -136,9 +136,6 @@ public class METARData
 				+ Arrays.toString(clouds) + ", remarks=" + remarks + "]";
 	}
 
-
-
-
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -163,9 +160,6 @@ public class METARData
 		result = prime * result + ((wxid == null) ? 0 : wxid.hashCode());
 		return result;
 	}
-
-
-
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -293,9 +287,6 @@ public class METARData
 		return true;
 	}
 
-
-
-
 	/**
 	 * Subclass for Wind information
 	 */
@@ -313,12 +304,13 @@ public class METARData
 		 */
 		public Wind()
 		{
+			super();
 		}
 
 		/**
 		 * Constructor to create Wind from JSONObject.
 		 * 
-		 * @param object
+		 * @param jsonObject
 		 *            JSON object from which to create Wind object.
 		 * 
 		 * @throws JSONException
@@ -448,7 +440,7 @@ public class METARData
 		/**
 		 * Constructor to create Visibility from JSONObject.
 		 * 
-		 * @param object
+		 * @param jsonObject
 		 *            JSON object from which to create Visibility object.
 		 * 
 		 * @throws JSONException
@@ -568,7 +560,7 @@ public class METARData
 		/**
 		 * Constructor to create Weather from JSONObject.
 		 * 
-		 * @param object
+		 * @param jsonObject
 		 *            JSON object from which to create Weather object.
 		 * 
 		 * @throws JSONException
@@ -724,7 +716,7 @@ public class METARData
 		/**
 		 * Constructor to create CloudLevel from JSONObject.
 		 * 
-		 * @param object
+		 * @param jsonObject
 		 *            JSON object from which to create CloudLevel object.
 		 * 
 		 * @throws JSONException

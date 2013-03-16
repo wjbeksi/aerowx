@@ -10,39 +10,45 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
+ * This class manages data coming from the GFS MOS MAV weather server.
+ * 
  * @author Wayne Johnson
- *
+ * 
  */
-public class GFSData
+public class GFSMOSMAVData
 {
-	//* Weather Station ID (4 letters) */
+	/* METAR Data */
+	// * Weather Station ID (4 letters) */
 	String wxid;
 
-	//* Time/Date of forecast (in GMT) */
+	// * Time/Date of forecast (in GMT) */
 	String time;
 
-	//* High temperature */
+	// * High temperature */
 	String high;
 
-	//* low temperature */
+	// * low temperature */
 	String low;
 
-	//* forecast periods */
-	Period periods[] ;
+	// * forecast periods */
+	Period periods[];
 
 	/**
-	 * 
+	 * Constructor for empty GFSMOSMAVData
 	 */
-	public GFSData()
+	public GFSMOSMAVData()
 	{
 		super();
 	}
 
 	/**
-	 * @throws JSONException
+	 * Constructor to create GFSMOSMAVData from JSONObject.
 	 * 
+	 * @param object
+	 *            JSON object from which to create GFSMOSMAVData object.
+	 * @throws JSONException
 	 */
-	public GFSData(JSONObject object) throws JSONException
+	public GFSMOSMAVData(JSONObject object) throws JSONException
 	{
 		super();
 
@@ -55,9 +61,29 @@ public class GFSData
 		periods = getPeriodsArray(object.getJSONArray("periods"));
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * Serialize GFSMOSMAVData object into JSON
+	 * 
+	 * @return JSONObject containing all the stuff.
+	 * 
+	 * @throws JSONException
+	 *             When JSON barfs on bad data.
 	 */
+	public JSONObject toJSONObject() throws JSONException
+	{
+		JSONObject object = new JSONObject();
+		object.put("wxid", wxid);
+		object.put("time", time);
+		object.put("high", high);
+		object.put("low", low);
+		if (periods != null)
+		{
+			object.put("periods", toJSONArray(periods));
+		}
+		return object;
+	}
+
+	/** Quintessential toString method */
 	@Override
 	public String toString()
 	{
@@ -66,7 +92,9 @@ public class GFSData
 				+ "]";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -82,7 +110,9 @@ public class GFSData
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -100,7 +130,7 @@ public class GFSData
 		{
 			return false;
 		}
-		GFSData other = (GFSData) obj;
+		GFSMOSMAVData other = (GFSMOSMAVData) obj;
 		if (high == null)
 		{
 			if (other.high != null)
@@ -148,73 +178,91 @@ public class GFSData
 		return true;
 	}
 
+	/**
+	 * Subclass for Period information
+	 */
 	class Period
 	{
 		/** Date of period */
 		String date;
-	
+
 		/** Beginning hour of period */
 		String hour;
-	
+
 		/** Temperature */
 		String temp;
-	
+
 		/** Dewpoint */
 		String dewpoint;
-	
+
 		/** Cloud cover */
 		String cover;
-	
+
 		/** Surface wind */
 		Wind wind;
-	
+
 		/** Probability of precipitation for previous 6 hours */
 		String pop6;
-	
+
 		/** Probability of precipitation for previous 12 hours */
 		String pop12;
-	
-		/** Quantitative precipitation forecast (accumulation) for previous 6 hours */
+
+		/**
+		 * Quantitative precipitation forecast (accumulation) for previous 6
+		 * hours
+		 */
 		String qpf6;
-	
-		/** Quantitative precipitation forecast (accumulation) for previous 12 hours */
+
+		/**
+		 * Quantitative precipitation forecast (accumulation) for previous 12
+		 * hours
+		 */
 		String qpf12;
-	
+
 		/** Probability of thunderstorms for previous 6 hours */
 		String thund6;
-	
+
 		/** Probability of thunderstorms for previous 12 hours */
 		String thund12;
-	
+
 		/** Probability of freezing precipitation */
 		String popz;
-	
+
 		/** Probability of snow */
 		String pops;
-	
+
 		/** Precipitation type */
 		String type;
-	
+
 		/** Snowfall accumulation */
 		String snow;
-	
+
 		/** Visibility */
 		String visibility;
-	
+
 		/** possible reason for obscurity (fog, smoke, etc) */
 		String obscurity;
-	
+
 		/** Ceiling altitude */
 		String ceiling;
 
 		/**
-		 * 
+		 * Constructor for empty Period data
 		 */
 		public Period()
 		{
 			super();
 		}
 
+		/**
+		 * Constructor to create Period from JSONObject.
+		 * 
+		 * @param object
+		 *            JSON object from which to create Period object.
+		 * 
+		 * @throws JSONException
+		 *             when JSON data is invalid.
+		 */
 		public Period(JSONObject object) throws JSONException
 		{
 			date = object.getString("date");
@@ -238,7 +286,47 @@ public class GFSData
 			ceiling = object.getString("ceiling");
 		}
 
-		/* (non-Javadoc)
+		/**
+		 * Serialize a Period object into JSON
+		 * 
+		 * @return JSONObject containing all the stuff.
+		 * 
+		 * @throws JSONException
+		 *             When JSON barfs on bad data.
+		 */
+		public Object toJSONObject() throws JSONException
+		{
+			JSONObject object = new JSONObject();
+
+			object.put("date", date);
+			object.put("hour", hour);
+			object.put("temp", temp);
+			object.put("dewpoint", dewpoint);
+			object.put("cover", cover);
+			if (wind != null)
+			{
+				object.put("wind", wind.toJSONObject());
+			}
+			object.put("pop6", pop6);
+			object.put("pop12", pop12);
+			object.put("qpf6", qpf6);
+			object.put("qpf12", qpf12);
+			object.put("thund6", thund6);
+			object.put("thund12", thund12);
+			object.put("popz", popz);
+			object.put("pops", pops);
+			object.put("type", type);
+			object.put("snow", snow);
+			object.put("visibility", visibility);
+			object.put("obscurity", obscurity);
+			object.put("ceiling", ceiling);
+
+			return object;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#toString()
 		 */
 		@Override
@@ -254,7 +342,9 @@ public class GFSData
 					+ ", ceiling=" + ceiling + "]";
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#hashCode()
 		 */
 		@Override
@@ -290,7 +380,9 @@ public class GFSData
 			return result;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#equals(java.lang.Object)
 		 */
 		@Override
@@ -503,6 +595,15 @@ public class GFSData
 		}
 	}
 
+	/**
+	 * Create Period array from JSON
+	 * 
+	 * @param jsonArray
+	 *            JSONArray containing period data
+	 * @return Period array.
+	 * @throws JSONException
+	 *             when JSON data is invalid.
+	 */
 	private Period[] getPeriodsArray(JSONArray jsonArray) throws JSONException
 	{
 		int length = jsonArray.length();
@@ -510,31 +611,63 @@ public class GFSData
 
 		for (int i = 0; i < jsonArray.length(); i++)
 		{
-			periods[i] = new GFSData.Period(
+			periods[i] = new GFSMOSMAVData.Period(
 					(JSONObject) (jsonArray.get(i)));
 		}
 		return periods;
 	}
 
+	/**
+	 * Serialize a Period array into JSON
+	 * 
+	 * @param periods
+	 *            period array
+	 * @return JSONObject containing all the stuff.
+	 * @throws JSONException
+	 *             When JSON barfs on bad data.
+	 */
+	private Object toJSONArray(Period[] periods) throws JSONException
+	{
+		JSONArray jsonArray = new JSONArray();
+
+		for (Period period : periods)
+		{
+			jsonArray.put(period.toJSONObject());
+		}
+		return jsonArray;
+	}
+
+	/**
+	 * Subclass for Wind information
+	 */
 	class Wind
 	{
 		/** direction */
 		String direction;
-	
+
 		/** speed */
 		String speed;
-	
+
 		/** optional wind gust speed */
 		String gust;
 
 		/**
-		 * 
+		 * Constructor for empty Wind data
 		 */
 		public Wind()
 		{
 			super();
 		}
 
+		/**
+		 * Constructor to create Wind from JSONObject.
+		 * 
+		 * @param object
+		 *            JSON object from which to create Wind object.
+		 * 
+		 * @throws JSONException
+		 *             when JSON data is invalid.
+		 */
 		public Wind(JSONObject object) throws JSONException
 		{
 			direction = object.getString("direction");
@@ -542,9 +675,24 @@ public class GFSData
 			gust = object.getString("gust");
 		}
 
-		/* (non-Javadoc)
-		 * @see java.lang.Object#toString()
+		/**
+		 * Serialize a Wind object into JSON
+		 * 
+		 * @return JSONObject containing all the stuff.
+		 * 
+		 * @throws JSONException
+		 *             When JSON barfs on bad data.
 		 */
+		public Object toJSONObject() throws JSONException
+		{
+			JSONObject object = new JSONObject();
+			object.put("direction", direction);
+			object.put("speed", speed);
+			object.put("gust", gust);
+			return object;
+		}
+
+		/** Quintessential toString method */
 		@Override
 		public String toString()
 		{
@@ -552,7 +700,9 @@ public class GFSData
 					+ ", gust=" + gust + "]";
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#hashCode()
 		 */
 		@Override
@@ -567,7 +717,9 @@ public class GFSData
 			return result;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#equals(java.lang.Object)
 		 */
 		@Override
