@@ -1,17 +1,6 @@
 package edu.umn.aerowx;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,9 +23,6 @@ public class MetarActivity extends Activity
 	String baseUrl = "http://aerowx.dccmn.com/get_weather";
 	String wxid = "kros";
 
-	/** Client to send out requests with */
-	HttpClient client = new DefaultHttpClient();
-
 	/**
 	 * 
 	 */
@@ -46,18 +32,9 @@ public class MetarActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-// Test MetarData for now.
-//		try
-//		{
-//			METARData.testMetarData();
-//		} catch (Exception e1)
-//		{
-//			Log.i(MetarActivity.class.toString(), e1.getMessage());
-//		}
-
 		try
 		{
-			readMETAR(baseUrl);
+			requestMETAR(baseUrl);
 		} catch (Exception e)
 		{
 			Log.i(MetarActivity.class.toString(), e.getMessage());
@@ -72,7 +49,20 @@ public class MetarActivity extends Activity
 		return true;
 	}
 
-	public void readMETAR(String baseUrl) throws IOException, JSONException
+	/**
+	 * request METAR data from server.
+	 * 
+	 * @param baseUrl
+	 *            Base URL of server.
+	 * @return METARData object
+	 * 
+	 * @throws IOException
+	 *             on server error
+	 * @throws JSONException
+	 *             when we receive a bad JSON message
+	 */
+	private METARData requestMETAR(String baseUrl) throws IOException,
+			JSONException
 	{
 		Log.i(MetarActivity.class.toString(), "readMETAR(" + baseUrl);
 
@@ -81,51 +71,9 @@ public class MetarActivity extends Activity
 		requestObject.put("time", "");
 		requestObject.put("server", "Metar");
 
-		JSONObject responseArray = postJSON(baseUrl, requestObject);
+		JSONObject responseArray = Utils.postJSON(baseUrl, requestObject);
 
 		METARData metarData = new METARData(responseArray);
+		return metarData;
 	}
-
-	private JSONObject postJSON(String baseUrl, JSONObject requestObject)
-			throws IOException, JSONException
-	{
-
-		Log.i(MetarActivity.class.toString(), "postJSON(" + baseUrl + ", "
-				+ requestObject + ")");
-
-		StringEntity entity = new StringEntity(requestObject.toString());
-
-		HttpPost httpPost = new HttpPost(baseUrl);
-		httpPost.setEntity(entity);
-		httpPost.setHeader("Accept", "application/json");
-		httpPost.setHeader("Content-type", "application/json");
-
-		HttpResponse response = client.execute(httpPost);
-
-		StatusLine statusLine = response.getStatusLine();
-
-		int statusCode = statusLine.getStatusCode();
-		Log.i(MetarActivity.class.toString(), "statusCode: " + statusCode);
-
-		if (statusCode == 200)
-		{
-			StringBuilder builder = new StringBuilder();
-
-			HttpEntity entity2 = response.getEntity();
-			InputStream content = entity2.getContent();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					content));
-			String line;
-			while ((line = reader.readLine()) != null)
-			{
-				builder.append(line);
-			}
-
-			JSONObject jsonArray = new JSONObject(builder.toString());
-			Log.i(MetarActivity.class.getName(), "JSON response: " + jsonArray);
-			return jsonArray;
-		}
-		return null;
-	}
-
 }
