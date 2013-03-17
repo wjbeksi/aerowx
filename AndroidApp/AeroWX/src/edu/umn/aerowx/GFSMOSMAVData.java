@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 /**
  * This class manages data coming from the GFS MOS MAV weather server.
  * 
@@ -19,19 +21,19 @@ public class GFSMOSMAVData
 {
 	/* METAR Data */
 	// * Weather Station ID (4 letters) */
-	String wxid;
+	public String wxid;
 
 	// * Time/Date of forecast (in GMT) */
-	String time;
+	public String time;
 
 	// * High temperature */
-	String high;
+	public String high;
 
 	// * low temperature */
-	String low;
+	public String low;
 
 	// * forecast periods */
-	Period periods[];
+	public Period periods[];
 
 	/**
 	 * Constructor for empty GFSMOSMAVData
@@ -39,6 +41,7 @@ public class GFSMOSMAVData
 	public GFSMOSMAVData()
 	{
 		super();
+		periods=new Period[4];
 	}
 
 	/**
@@ -120,14 +123,17 @@ public class GFSMOSMAVData
 	{
 		if (this == obj)
 		{
+			Log.d(this.getClass().getName(), "this equals obj");
 			return true;
 		}
 		if (obj == null)
 		{
+			Log.d(this.getClass().getName(), "obj==null");
 			return false;
 		}
 		if (getClass() != obj.getClass())
 		{
+			Log.d(this.getClass().getName(), "getClass("+getClass()+") != obj.getClass("+obj.getClass()+")");
 			return false;
 		}
 		GFSMOSMAVData other = (GFSMOSMAVData) obj;
@@ -135,44 +141,53 @@ public class GFSMOSMAVData
 		{
 			if (other.high != null)
 			{
+				Log.d(getClass().getName(), "high==null && other.high="+other.high);
 				return false;
 			}
 		} else if (!high.equals(other.high))
 		{
+			Log.d(getClass().getName(), "high="+high+" && other.high="+other.high);
 			return false;
 		}
 		if (low == null)
 		{
 			if (other.low != null)
 			{
+				Log.d(getClass().getName(), "low==null && other.low="+other.low);
 				return false;
 			}
 		} else if (!low.equals(other.low))
 		{
+			Log.d(getClass().getName(), "low="+low+" && other.low="+other.low);
 			return false;
 		}
 		if (!Arrays.equals(periods, other.periods))
 		{
+			Log.d(getClass().getName(), "Arrays !=");
 			return false;
 		}
 		if (time == null)
 		{
 			if (other.time != null)
 			{
+				Log.d(getClass().getName(), "time==null && other.time="+other.time);
 				return false;
 			}
 		} else if (!time.equals(other.time))
 		{
+			Log.d(getClass().getName(), "time="+time+" && other.time="+other.time);
 			return false;
 		}
 		if (wxid == null)
 		{
 			if (other.wxid != null)
 			{
+				Log.d(getClass().getName(), "wxid==null && other.wxid="+other.wxid);
 				return false;
 			}
 		} else if (!wxid.equals(other.wxid))
 		{
+			Log.d(getClass().getName(), "wxid="+wxid+" && other.wxid="+other.wxid);
 			return false;
 		}
 		return true;
@@ -181,70 +196,70 @@ public class GFSMOSMAVData
 	/**
 	 * Subclass for Period information
 	 */
-	class Period
+	public class Period
 	{
 		/** Date of period */
-		String date;
+		public String date;
 
 		/** Beginning hour of period */
-		String hour;
+		public String hour;
 
 		/** Temperature */
-		String temp;
+		public String temp;
 
 		/** Dewpoint */
-		String dewpoint;
+		public String dewpoint;
 
 		/** Cloud cover */
-		String cover;
+		public String cover;
 
 		/** Surface wind */
-		Wind wind;
+		public Wind wind;
 
 		/** Probability of precipitation for previous 6 hours */
-		String pop6;
+		public String pop6;
 
 		/** Probability of precipitation for previous 12 hours */
-		String pop12;
+		public String pop12;
 
 		/**
 		 * Quantitative precipitation forecast (accumulation) for previous 6
 		 * hours
 		 */
-		String qpf6;
+		public String qpf6;
 
 		/**
 		 * Quantitative precipitation forecast (accumulation) for previous 12
 		 * hours
 		 */
-		String qpf12;
+		public String qpf12;
 
 		/** Probability of thunderstorms for previous 6 hours */
-		String thund6;
+		public String thund6;
 
 		/** Probability of thunderstorms for previous 12 hours */
-		String thund12;
+		public String thund12;
 
 		/** Probability of freezing precipitation */
-		String popz;
+		public String popz;
 
 		/** Probability of snow */
-		String pops;
+		public String pops;
 
 		/** Precipitation type */
-		String type;
+		public String type;
 
 		/** Snowfall accumulation */
-		String snow;
+		public String snow;
 
 		/** Visibility */
-		String visibility;
+		public String visibility;
 
 		/** possible reason for obscurity (fog, smoke, etc) */
-		String obscurity;
+		public String obscurity;
 
 		/** Ceiling altitude */
-		String ceiling;
+		public String ceiling;
 
 		/**
 		 * Constructor for empty Period data
@@ -252,6 +267,7 @@ public class GFSMOSMAVData
 		public Period()
 		{
 			super();
+			wind = new Wind();
 		}
 
 		/**
@@ -640,16 +656,16 @@ public class GFSMOSMAVData
 	/**
 	 * Subclass for Wind information
 	 */
-	class Wind
+	public class Wind
 	{
 		/** direction */
-		String direction;
+		public String direction;
 
 		/** speed */
-		String speed;
+		public String speed;
 
 		/** optional wind gust speed */
-		String gust;
+		public String gust;
 
 		/**
 		 * Constructor for empty Wind data
@@ -672,7 +688,7 @@ public class GFSMOSMAVData
 		{
 			direction = object.getString("direction");
 			speed = object.getString("speed");
-			gust = object.getString("gust");
+			gust = object.optString("gust", null);
 		}
 
 		/**
@@ -688,7 +704,10 @@ public class GFSMOSMAVData
 			JSONObject object = new JSONObject();
 			object.put("direction", direction);
 			object.put("speed", speed);
-			object.put("gust", gust);
+			if (gust != null)
+			{
+				object.put("gust", gust);
+			}
 			return object;
 		}
 

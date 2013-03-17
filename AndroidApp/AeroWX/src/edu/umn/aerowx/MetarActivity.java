@@ -64,7 +64,7 @@ public class MetarActivity extends Activity
 	private METARData requestMETAR(String baseUrl) throws IOException,
 			JSONException
 	{
-		Log.i(MetarActivity.class.toString(), "readMETAR(" + baseUrl);
+		Log.i(MetarActivity.class.toString(), "requestMETAR(" + baseUrl + ")");
 
 		JSONObject requestObject = new JSONObject();
 		requestObject.put("wxid", wxid);
@@ -74,6 +74,8 @@ public class MetarActivity extends Activity
 		JSONObject responseArray = Utils.postJSON(baseUrl, requestObject);
 
 		METARData metarData = new METARData(responseArray);
+		Log.i(MetarActivity.class.toString(), "response: " + metarData);
+
 		return metarData;
 	}
 }
