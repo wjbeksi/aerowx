@@ -42,7 +42,7 @@ def ExternalRequest(client_req):
         print "METAR code: ", line
         print string.join(err.args,", "),"\n"
 
-# Validate all required fields of a client request
+# Validate all required fields of a client request, make sure we have a valid req
 # client_req = [{
 #    "source"   : "",  # Weather service to use
 #    "location" : "",  # Weather station ID 
