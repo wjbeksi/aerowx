@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.TextView;
 
 /**
  * Main activity for AeroWX App
@@ -32,13 +33,27 @@ public class MetarActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		METARData metar = null;
 		try
 		{
-			requestMETAR(baseUrl);
+			metar=requestMETAR(baseUrl);
 		} catch (Exception e)
 		{
 			Log.i(MetarActivity.class.toString(), e.getMessage());
 		}
+		
+	    // Create the wxid view
+	    TextView stationView = (TextView)findViewById(R.id.station);
+	    stationView.setText(metar.wxid);
+
+	    // Create the time view
+	    TextView timeView = (TextView)findViewById(R.id.time);
+	    timeView.setText(metar.time);
+
+	    // Create the temp view
+	    TextView tempView = (TextView)findViewById(R.id.temp);
+	    tempView.setText(metar.temp);
+
 	}
 
 	@Override
