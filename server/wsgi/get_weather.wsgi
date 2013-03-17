@@ -2,8 +2,8 @@
 
 import urllib
 import json, logging
-from parsers.metar import Metar
 from logging import debug
+from parsers.metar import Metar
 
 # TODO: this needs to go into a metar function
 BASE_URL = "http://weather.noaa.gov/pub/data/observations/metar/stations"
