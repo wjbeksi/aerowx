@@ -1,9 +1,14 @@
 #!/usr/bin/env python
 
+import urllib
 import json, logging
+from parsers.metar import Metar
 from logging import debug
 
-# enable debug prints 
+# TODO: this needs to go into a metar function
+BASE_URL = "http://weather.noaa.gov/pub/data/observations/metar/stations"
+
+# Enable debug prints 
 logging.basicConfig(level=logging.DEBUG)
 
 ###################################################################
@@ -11,7 +16,6 @@ logging.basicConfig(level=logging.DEBUG)
 ###################################################################
 def CacheLookup(client_req):
     return None
-
 
 def CacheInsertion():
     pass
@@ -21,8 +25,22 @@ def ResponseParser():
 
 # TODO: break out into explicit parameters?
 def ExternalRequest(client_req):
-    pass
-
+    # TODO: this needs to go into a metar function
+    name = 'KROS'  # Hard coded for testing...
+    url = "%s/%s.TXT" % (BASE_URL, name)
+    try:
+        urlh = urllib.urlopen(url)
+        report = ''
+        for line in urlh:
+            if line.startswith(name):
+                report = line.strip()
+                obs = Metar.Metar(line)
+                return obs.json()
+        if not report:
+            print "No data for ", name, "\n\n"
+    except Metar.ParserError, err:
+        print "METAR code: ", line
+        print string.join(err.args,", "),"\n"
 
 # Validate all required fields of a client request
 # client_req = [{
@@ -36,9 +54,9 @@ def ValidateClientRequest(client_req):
 def ClientRequestHandler(client_req):
     response = []
 
-    # validate client_req
-    if(ValidateClientRequest(client_req)):
-        # look up request in cache
+    # Validate the client_req
+    if (ValidateClientRequest(client_req)):
+        # Look up request in the cache
         cacheHit = CacheLookup(client_req)
         if cacheHit != None:
             response = cacheHit
@@ -51,7 +69,7 @@ def ClientRequestHandler(client_req):
     return response
 
 ###################################################################
-# Application Entry Point
+# Application entry point
 ###################################################################
 def application(environ, start_response):
     client_req = [{"error": "invalid request"}]
@@ -76,7 +94,8 @@ def application(environ, start_response):
     response = ClientRequestHandler(client_req)
 
     # Construct JSON response
-    response_body = json.dumps(response)
+    #response_body = json.dumps(response)
+    response_body = response
     status = '200 OK'
     response_headers = [('Content-type', 'application/json'),
                         ('Content-Length', str(len(response_body)))]
@@ -84,17 +103,15 @@ def application(environ, start_response):
 
     return [response_body]
 
-
 ###################################################################
-# if we are running directly from python (i.e. local testing), 
-# then execute a local httpd test server.
-# Otherwise the apache mod_wsgi will import this module to
-# handle requests.
+# If we are running directly from Python (i.e. local testing), then 
+# execute a local httpd test server.  Otherwise, the Apache mod_wsgi 
+# will import this module to handle requests.
 ###################################################################
 if __name__ == '__main__':
     from wsgiref.simple_server import make_server
 
-    httpd = make_server('localhost',8051,application)
+    httpd = make_server('localhost', 8051, application)
     print "Listening on http://localhost:8051"
-    while(1):
+    while (1):
         httpd.handle_request()
