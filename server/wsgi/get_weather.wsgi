@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
+import sys
+import json 
+import string
 import urllib
-import json, logging
+import logging
 from logging import debug
 from parsers.metar import Metar
-
-# TODO: this needs to go into a metar function
-BASE_URL = "http://weather.noaa.gov/pub/data/observations/metar/stations"
 
 # Enable debug prints 
 logging.basicConfig(level=logging.DEBUG)
@@ -25,22 +25,9 @@ def ResponseParser():
 
 # TODO: break out into explicit parameters?
 def ExternalRequest(client_req):
-    # TODO: this needs to go into a metar function
-    name = 'KROS'  # Hard coded for testing...
-    url = "%s/%s.TXT" % (BASE_URL, name)
-    try:
-        urlh = urllib.urlopen(url)
-        report = ''
-        for line in urlh:
-            if line.startswith(name):
-                report = line.strip()
-                obs = Metar.Metar(line)
-                return obs.json()
-        if not report:
-            print "No data for ", name, "\n\n"
-    except Metar.ParserError, err:
-        print "METAR code: ", line
-        print string.join(err.args,", "),"\n"
+    for item in client_req:
+        if item['source'].lower() == 'metar':
+            return get_metar_report(item['location'].upper())
 
 # Validate all required fields of a client request, make sure we have a valid req
 # client_req = [{
@@ -67,6 +54,26 @@ def ClientRequestHandler(client_req):
         response = [{"error": "invalid request"}]
 
     return response
+
+###################################################################
+# Weather report handlers 
+###################################################################
+def get_metar_report(station_id):
+    base_url = "http://weather.noaa.gov/pub/data/observations/metar/stations"
+    url = "%s/%s.TXT" % (base_url, station_id)
+    try:
+        urlh = urllib.urlopen(url)
+        report = ''
+        for line in urlh:
+            if line.startswith(station_id):
+                report = line.strip()
+                obs = Metar.Metar(line)
+                return obs.json()
+        if not report:
+            debug("No data for %s", station_id)
+    except Metar.ParserError, err:
+        debug("METAR code: %s", line)
+        debug("%s", string.join(err.args, ", "))
 
 ###################################################################
 # Application entry point
