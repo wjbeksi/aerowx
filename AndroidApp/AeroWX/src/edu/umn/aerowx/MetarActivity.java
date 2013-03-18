@@ -82,9 +82,9 @@ public class MetarActivity extends Activity
 		Log.i(MetarActivity.class.toString(), "requestMETAR(" + baseUrl + ")");
 
 		JSONObject requestObject = new JSONObject();
-		requestObject.put("wxid", wxid);
+		requestObject.put("location", wxid);
 		requestObject.put("time", "");
-		requestObject.put("server", "Metar");
+		requestObject.put("source", "metar");
 
 		JSONObject responseArray = Utils.postJSON(baseUrl, requestObject);
 
