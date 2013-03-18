@@ -1,15 +1,18 @@
+#!/usr/bin/env python
+
 import json, urllib, urllib2
 
-url = "http://127.0.0.1:8051" #default target
+url = "http://127.0.0.1:8051"  # Default target
 
-
-def test1():
-	# build standard request
-	data = [{"test":"123"}]
+def test_1():
+	# Build a standard request
+	data = [{"source" : "metar", 
+             "location" : "kros",
+             "datetime" : ""}]
 
 	request_data = json.dumps(data)
 
-	# build http request
+	# Build an HTTP request
 	#request_data = urllib.urlencode(request_data)
 	req = urllib2.Request(url, request_data)
 	response = urllib2.urlopen(req)
@@ -17,6 +20,5 @@ def test1():
 
 	print response_data
 
-
-#run test
-test1()
+# Run test
+test_1()
