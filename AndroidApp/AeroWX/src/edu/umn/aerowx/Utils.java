@@ -4,7 +4,6 @@
 package edu.umn.aerowx;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -16,16 +15,16 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import android.util.Log;
 
 /**
  * Common Utility Routines.
  * 
- * @author waynej
- *
+ * @author Wayne Johnson
+ * 
  */
 public class Utils
 {
@@ -33,8 +32,20 @@ public class Utils
 	/** Client to send out HTTP requests with */
 	static HttpClient client = new DefaultHttpClient();
 
-	public static JSONObject postJSON(String baseUrl, JSONArray requestArray)
-			throws IOException, JSONException
+	/**
+	 * Post a request to the server and get a response.
+	 * 
+	 * @param baseUrl
+	 *            URL of server
+	 * @param requestArray
+	 *            parameters for request
+	 * @return object containing either a JSONObject or JSONArray.
+	 * @throws Exception
+	 *             if we get an IOException from the HTTP client, or a bad JSON
+	 *             response.
+	 */
+	public static Object postJSON(String baseUrl, JSONArray requestArray)
+			throws Exception
 	{
 
 		Log.i(MetarActivity.class.toString(), "postJSON(" + baseUrl + ", "
@@ -54,7 +65,11 @@ public class Utils
 		int statusCode = statusLine.getStatusCode();
 		Log.i(MetarActivity.class.toString(), "statusCode: " + statusCode);
 
-		if (statusCode == 200)
+		if (statusCode != 200)
+		{
+			throw new Exception("Server returned error " + statusCode + ": "
+					+ statusLine.getReasonPhrase());
+		} else
 		{
 			StringBuilder builder = new StringBuilder();
 
@@ -68,10 +83,16 @@ public class Utils
 				builder.append(line);
 			}
 
-			JSONObject jsonArray = new JSONObject(builder.toString());
-			Log.i(MetarActivity.class.getName(), "JSON response: " + jsonArray);
-			return jsonArray;
+			Object object = new JSONTokener(builder.toString()).nextValue();
+			if (!(object instanceof JSONArray)
+					&& !(object instanceof JSONObject))
+			{
+				throw new Exception(
+						"Server returned invalid response containing " + object);
+			}
+
+			Log.i(MetarActivity.class.getName(), "JSON response: " + object);
+			return object;
 		}
-		return null;
 	}
 }
