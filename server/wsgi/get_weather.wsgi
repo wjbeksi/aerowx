@@ -49,7 +49,6 @@ def ValidateClientRequest(client_req):
 # Determine which source should be queried and pass in a station id 
 # A JSON object will be returned containing current weather info
 # for the station ID.  
-# TODO ## implement caching here
 ###################################################################
 def ExternalRequest(client_req):
     if client_req[0]['source'].lower() == 'metar':
@@ -109,7 +108,7 @@ def get_metar_report(station_id):
 
 def get_mav_report(station_id):
     # TODO implement MAV decoding
-    pass
+    return json.dumps([{"error": "MAV requests not implemented yet"}])
 
 ###################################################################
 # Application entry point

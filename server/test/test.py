@@ -51,7 +51,7 @@ This is testing the error handling, we should not see unhandled exceptions
 	print "# ERROR No Source"
 	
 	data = [{"source" : "", 
-             "location" : "krol",
+             "location" : "kros",
              "datetime" : ""}]
 
 	print issue_request(data)
