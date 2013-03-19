@@ -15,6 +15,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,14 +33,14 @@ public class Utils
 	/** Client to send out HTTP requests with */
 	static HttpClient client = new DefaultHttpClient();
 
-	public static JSONObject postJSON(String baseUrl, JSONObject requestObject)
+	public static JSONObject postJSON(String baseUrl, JSONArray requestArray)
 			throws IOException, JSONException
 	{
 
 		Log.i(MetarActivity.class.toString(), "postJSON(" + baseUrl + ", "
-				+ requestObject + ")");
+				+ requestArray + ")");
 
-		StringEntity entity = new StringEntity(requestObject.toString());
+		StringEntity entity = new StringEntity(requestArray.toString());
 
 		HttpPost httpPost = new HttpPost(baseUrl);
 		httpPost.setEntity(entity);

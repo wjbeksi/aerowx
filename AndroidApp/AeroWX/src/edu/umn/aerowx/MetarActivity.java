@@ -1,6 +1,8 @@
 package edu.umn.aerowx;
 
 import java.io.IOException;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -85,8 +87,9 @@ public class MetarActivity extends Activity
 		requestObject.put("location", wxid);
 		requestObject.put("time", "");
 		requestObject.put("source", "metar");
-
-		JSONObject responseArray = Utils.postJSON(baseUrl, requestObject);
+		JSONArray requestArray = new JSONArray();
+		requestArray.put(requestObject);
+		JSONObject responseArray = Utils.postJSON(baseUrl, requestArray);
 
 		METARData metarData = new METARData(responseArray);
 		Log.i(MetarActivity.class.toString(), "response: " + metarData);
