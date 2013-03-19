@@ -4,13 +4,8 @@ import json, urllib, urllib2
 
 url = "http://127.0.0.1:8051"  # Default target
 
-def test_1():
-	# Build a standard request
-	data = [{"source" : "metar", 
-             "location" : "kros",
-             "datetime" : ""}]
-
-	request_data = json.dumps(data)
+def issue_request(request):
+	request_data = json.dumps(request)
 
 	# Build an HTTP request
 	#request_data = urllib.urlencode(request_data)
@@ -18,7 +13,66 @@ def test_1():
 	response = urllib2.urlopen(req)
 	response_data = response.read()
 
-	print response_data
+	return response_data
 
-# Run test
+def test_1():
+	# Build a standard METAR request
+	print "# Build a standard METAR request"
+	data = [{"source" : "metar", 
+             "location" : "kros",
+             "datetime" : ""}]
+	print issue_request(data)
+
+def test_error_handling():
+	print """
+For the following tests expect an error JSON response
+This is testing the error handling, we should not see unhandled exceptions
+	"""
+
+	# ERROR Invalid Source
+	print "# ERROR Invalid Source"
+
+	data = [{"source" : "google", 
+             "location" : "kros",
+             "datetime" : ""}]
+
+	print issue_request(data)
+
+	# ERROR Invalid Source
+	print "# ERROR Invalid Station"
+	
+	data = [{"source" : "metar", 
+             "location" : "krol",
+             "datetime" : ""}]
+
+	print issue_request(data)
+
+	# ERROR No Source
+	print "# ERROR No Source"
+	
+	data = [{"source" : "", 
+             "location" : "krol",
+             "datetime" : ""}]
+
+	print issue_request(data)
+	
+	# ERROR No location
+	print "# ERROR No location"
+	
+	data = [{"source" : "metar", 
+             "location" : "",
+             "datetime" : ""}]
+
+	print issue_request(data)
+
+	# ERROR Missing Request Fields
+	print "# ERROR Missing Request Fields"
+	
+	data = [{"location" : "",
+             "datetime" : ""}]
+
+	print issue_request(data)
+
+# Run tests
 test_1()
+test_error_handling()

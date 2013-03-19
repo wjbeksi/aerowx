@@ -12,32 +12,63 @@ from parsers.metar import Metar
 logging.basicConfig(level=logging.DEBUG)
 
 ###################################################################
-# TODO ### define Supporting API
+# Caching Interface
 ###################################################################
 def CacheLookup(client_req):
     return None
 
-def CacheInsertion():
+def CacheInsertion(json_data):
     pass
 
-def ResponseParser():
-    pass
 
-# TODO: break out into explicit parameters?
-def ExternalRequest(client_req):
-    for item in client_req:
-        if item['source'].lower() == 'metar':
-            return get_metar_report(item['location'].upper())
-
+###################################################################
 # Validate all required fields of a client request, make sure we have a valid req
 # client_req = [{
 #    "source"   : "",  # Weather service to use
 #    "location" : "",  # Weather station ID 
-#    "datetime" : "",  # Date & time to get weather info for
+#    "datetime" : "",  # (optional) Date & time to get weather info for
 # }]
+###################################################################
 def ValidateClientRequest(client_req):
-    return True
+    try:
+        source = client_req[0]['source'].lower() 
+        location = client_req[0]['location'] 
+        
+        # validate a proper source and location is set
+        if source in ['metar', 'gfs'] and len(location) > 0:
+            return True
+    except:
+        debug("No source in client request")
 
+    # invalid client request
+    return False
+
+
+###################################################################
+# External Weather request handler 
+# Determine which source should be queried and pass in a station id 
+# A JSON object will be returned containing current weather info
+# for the station ID.  
+# TODO ## implement caching here
+###################################################################
+def ExternalRequest(client_req):
+    if client_req[0]['source'].lower() == 'metar':
+        response = get_metar_report(client_req[0]['location'].upper())
+
+    elif client_req[0]['source'].lower() == 'mav':
+        response = get_mav_report(client_req[0]['location'].upper())
+
+    # Cache returning data to prevent future web queries
+    CacheInsertion(response)
+
+    return response
+
+###################################################################
+# Main client request handler
+# Process a new client request, validate the contents of the request
+# Look for a local cache hit for the request, if not in cache
+# issue an extern request to update the current weather info.
+###################################################################
 def ClientRequestHandler(client_req):
     response = []
 
@@ -51,7 +82,7 @@ def ClientRequestHandler(client_req):
             # pass on client_req to correct handler if no cache hit
             response = ExternalRequest(client_req)
     else:
-        response = [{"error": "invalid request"}]
+        response = json.dumps([{"error": "invalid request"}])
 
     return response
 
@@ -71,9 +102,14 @@ def get_metar_report(station_id):
                 return obs.json()
         if not report:
             debug("No data for %s", station_id)
+            return json.dumps([{"error": "invalid station id"}])
     except Metar.ParserError, err:
         debug("METAR code: %s", line)
         debug("%s", string.join(err.args, ", "))
+
+def get_mav_report(station_id):
+    # TODO implement MAV decoding
+    pass
 
 ###################################################################
 # Application entry point
@@ -101,7 +137,6 @@ def application(environ, start_response):
     response = ClientRequestHandler(client_req)
 
     # Construct JSON response
-    #response_body = json.dumps(response)
     response_body = response
     status = '200 OK'
     response_headers = [('Content-type', 'application/json'),
