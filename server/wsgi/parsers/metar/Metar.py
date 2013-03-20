@@ -1003,29 +1003,29 @@ class Metar(object):
       Return a JSON version of the decoded report.
       """
       report = {'station' : self.station_id,
-                     'type' : 'None',
-                     'time' : 'None',
-                     'temperature' : 'None',
-                     'dew point' : 'None',
-                     'wind' : 'None',
-                     'peak wind' : 'None',
-                     'wind shift' : 'None',
-                     'visibility' : 'None',
-                     'visual range' : 'None',
-                     'presssure' : 'None',
-                     'weather' : 'None',
-                     'sky' : 'None',
-                     'sea-level pressure' : 'None',
-                     '6-hour max temp' : 'None',
-                     '6-hour min temp' : 'None',
-                     '24-hour max temp' : 'None',
-                     '24-hour min temp' : 'None',
-                     '1-hour precipitation' : 'None',
-                     '3-hour precipitation' : 'None',
-                     '6-hour precipitation' : 'None',
-                     '24-hour precipitation' : 'None',
-                     'remarks' : 'None',
-                     'unparsed remarks' : 'None'}
+                'type' : 'None',
+                'time' : 'None',
+                'temperature' : 'None',
+                'dew point' : 'None',
+                'wind' : 'None',
+                'peak wind' : 'None',
+                'wind shift' : 'None',
+                'visibility' : 'None',
+                'visual range' : 'None',
+                'pressure' : 'None',
+                'weather' : 'None',
+                'sky' : 'None',
+                'sea-level pressure' : 'None',
+                '6-hour max temp' : 'None',
+                '6-hour min temp' : 'None',
+                '24-hour max temp' : 'None',
+                '24-hour min temp' : 'None',
+                '1-hour precipitation' : 'None',
+                '3-hour precipitation' : 'None',
+                '6-hour precipitation' : 'None',
+                '24-hour precipitation' : 'None',
+                'remarks' : 'None',
+                'unparsed remarks' : 'None'}
       if self.type:
           report['type'] = self.report_type()
       if self.time:
@@ -1073,8 +1073,8 @@ class Metar(object):
       if self._unparsed_remarks:
           report['unparsed remarks'] = self._unparsed_remarks
       # For pretty printing
-      return json.dumps({'metar': report}, sort_keys=True, indent=4, separators=(',', ': '))
-      #return json.dumps({'metar': report}) 
+      #return json.dumps({'metar': report}, sort_keys=True, indent=4, separators=(',', ': '))
+      return json.dumps({'metar': report}) 
 
   def report_type( self ):
       """
