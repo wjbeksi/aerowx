@@ -75,4 +75,4 @@ This is testing the error handling, we should not see unhandled exceptions
 
 # Run tests
 test_1()
-test_error_handling()
+#test_error_handling()
