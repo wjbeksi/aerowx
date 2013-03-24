@@ -16,7 +16,10 @@ logging.basicConfig(level=logging.DEBUG)
 ###############################################################################
 # Cache global database config
 ###############################################################################
-db = create_engine('sqlite:///cache.db')
+#db = create_engine('sqlite:///cache.db')
+# we need to use an absolute path for running in apache... not sure where the 
+# relative path begins... need to fix
+db = create_engine('sqlite:////var/www/aerowx/server/wsgi/cache.db')
 db.echo = False # set to True for debugging
 metadata = MetaData(db)
 # Table Reference
