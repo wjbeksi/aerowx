@@ -4,12 +4,14 @@
 package edu.umn.aerowx;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -18,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 /**
@@ -31,6 +34,38 @@ public class Utils
 
 	/** Client to send out HTTP requests with */
 	static HttpClient client = new DefaultHttpClient();
+
+	/**
+	 * Android 3.0 and above require that network threads be run off the UI
+	 * thread. This class defines a task that will do the network I/O safely.
+	 */
+	static class RequestTask extends AsyncTask<Object, Void, HttpResponse>
+	{
+		@Override
+		protected HttpResponse doInBackground(Object... params)
+		{
+			String baseUrl = (String) params[0];
+			StringEntity entity = (StringEntity) params[1];
+
+			HttpPost httpPost = new HttpPost(baseUrl);
+			httpPost.setEntity(entity);
+			httpPost.setHeader("Accept", "application/json");
+			httpPost.setHeader("Content-type", "application/json");
+
+			HttpResponse response;
+			try
+			{
+				response = client.execute(httpPost);
+			} catch (ClientProtocolException e)
+			{
+				return null;
+			} catch (IOException e)
+			{
+				return null;
+			}
+			return response;
+		}
+	}
 
 	/**
 	 * Post a request to the server and get a response.
@@ -53,12 +88,9 @@ public class Utils
 
 		StringEntity entity = new StringEntity(requestArray.toString());
 
-		HttpPost httpPost = new HttpPost(baseUrl);
-		httpPost.setEntity(entity);
-		httpPost.setHeader("Accept", "application/json");
-		httpPost.setHeader("Content-type", "application/json");
-
-		HttpResponse response = client.execute(httpPost);
+		RequestTask requestTask=new RequestTask();
+		requestTask.execute(baseUrl, entity);
+		HttpResponse response = requestTask.get();
 
 		StatusLine statusLine = response.getStatusLine();
 
