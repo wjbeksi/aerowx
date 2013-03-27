@@ -3,15 +3,31 @@
 
     <string name="app_name">AeroWX</string>
     <string name="action_settings">Settings</string>
+    
     <string name="AeroWX">Aeronautical Weather in the Field</string>
+    
+    <!--  METAR field labels -->  
     <string name="Station">Station</string>
     <string name="Time">Time</string>
     <string name="Temp">Temp</string>
     <string name="Dewpoint">Dewpoint</string>
     <string name="Pressure">Pressure</string>
     <string name="Wind">Wind</string>
-	<string name="Visibility">Visibility</string>
-	<string name="Weather">Weather</string>
-	<string name="Sky">Sky</string>
+    <string name="Visibility">Visibility</string>
+    <string name="Weather">Weather</string>
+    <string name="Sky">Sky</string>
+    <string name="Forecast">Forecast</string>
     
+    
+    <!--  GFS/MOS/MAV field labels -->  
+    <string name="title_activity_gfs">Forecast</string>
+    <string name="High">High</string>
+    <string name="Low">Low</string>
+    <string name="Dewpt">Dewpt</string>
+    <string name="Precip">Precip</string>
+    <string name="Visi">Visi</string>
+    <string name="Thund">Thund</string>
+    <string name="Ceil">Ceil</string>
+    
+
 </resources>

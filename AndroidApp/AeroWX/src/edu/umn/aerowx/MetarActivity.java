@@ -8,9 +8,12 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -23,7 +26,7 @@ import android.widget.TextView;
 public class MetarActivity extends Activity
 {
 
-	// Temporary settings
+	// TODO: Temporary settings
 	String baseUrl = "http://aerowx.dccmn.com/get_weather";
 	String wxid = "kros";
 
@@ -34,7 +37,7 @@ public class MetarActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_metar);
 
 		METARData metar = null;
 		try
@@ -181,4 +184,12 @@ public class MetarActivity extends Activity
 		dialog.show();
 
 	}
+
+    /** Called when the user clicks the Send button */
+    public void doForecast(View view) {
+        // Do something in response to button
+    	
+    	Intent intent = new Intent(this, GFSActivity.class);
+        startActivity(intent);
+    }
 }
