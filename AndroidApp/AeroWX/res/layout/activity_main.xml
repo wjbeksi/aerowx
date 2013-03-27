@@ -25,7 +25,7 @@
 
     <TextView
         android:id="@+id/stationLabel"
-        android:layout_width="50dp"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -41,8 +41,7 @@
         android:id="@+id/station"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/stationLabel"
-        android:layout_alignBottom="@+id/station"
+        android:layout_alignBottom="@+id/stationLabel"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="2dp"
@@ -53,7 +52,7 @@
 
     <TextView
         android:id="@+id/timeLabel"
-        android:layout_width="50dp"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -68,7 +67,6 @@
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/timeLabel"
         android:layout_alignBottom="@+id/timeLabel"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
@@ -80,22 +78,23 @@
 
     <TextView
         android:id="@+id/tempLabel"
-        android:layout_width="50dp"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/dewLabel"
         android:layout_below="@+id/timeLabel"
         android:layout_margin="2dp"
         android:ems="10"
         android:inputType="none"
         android:text="@string/Temp" >
+
     </TextView>
 
     <TextView
         android:id="@+id/temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tempLabel"
         android:layout_alignBottom="@+id/tempLabel"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
@@ -104,4 +103,169 @@
         android:ems="10"
         android:inputType="none" >
     </TextView>
+
+    <TextView
+        android:id="@+id/dewLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tempLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Dewpoint" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/dewpoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/dewLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/dewLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/pressLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/dewLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Pressure" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/pressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/pressLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/pressLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+    
+    <TextView
+        android:id="@+id/windLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/pressLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Wind" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/wind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/windLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/windLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+    
+    <TextView
+        android:id="@+id/visLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/windLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Visibility" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/vis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/visLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/visLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+    
+    <TextView
+        android:id="@+id/wxLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/visLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Weather" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/wx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/wxLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/wxLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/skyLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/wxLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Sky" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/sky"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/forecastButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/skyLabel"
+        android:ems="10"
+        android:inputType="none"
+        android:singleLine="false" >
+    </TextView>
+
+    <Button
+        android:id="@+id/forecastButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="Forecast" />
+
 </RelativeLayout>

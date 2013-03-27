@@ -24,14 +24,27 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f080007;
+        public static final int action_settings=0x7f080014;
+        public static final int dewLabel=0x7f080006;
+        public static final int dewpoint=0x7f080008;
+        public static final int forecastButton=0x7f080013;
+        public static final int pressLabel=0x7f080009;
+        public static final int pressure=0x7f08000a;
+        public static final int sky=0x7f080012;
+        public static final int skyLabel=0x7f080011;
         public static final int station=0x7f080002;
         public static final int stationLabel=0x7f080001;
-        public static final int temp=0x7f080006;
+        public static final int temp=0x7f080007;
         public static final int tempLabel=0x7f080005;
         public static final int textView1=0x7f080000;
         public static final int time=0x7f080004;
         public static final int timeLabel=0x7f080003;
+        public static final int vis=0x7f08000e;
+        public static final int visLabel=0x7f08000d;
+        public static final int wind=0x7f08000c;
+        public static final int windLabel=0x7f08000b;
+        public static final int wx=0x7f080010;
+        public static final int wxLabel=0x7f08000f;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -41,9 +54,15 @@ public final class R {
     }
     public static final class string {
         public static final int AeroWX=0x7f050002;
+        public static final int Dewpoint=0x7f050006;
+        public static final int Pressure=0x7f050007;
+        public static final int Sky=0x7f05000b;
         public static final int Station=0x7f050003;
         public static final int Temp=0x7f050005;
         public static final int Time=0x7f050004;
+        public static final int Visibility=0x7f050009;
+        public static final int Weather=0x7f05000a;
+        public static final int Wind=0x7f050008;
         public static final int action_settings=0x7f050001;
         public static final int app_name=0x7f050000;
     }
