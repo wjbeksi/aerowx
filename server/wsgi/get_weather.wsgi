@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 
+import re
 import sys
 import json 
 import string
-import urllib
 import logging
+import datetime, time
+import urllib, urllib2
+from sqlalchemy import *
 from logging import debug
 from parsers.metar import Metar
-from sqlalchemy import *
-import datetime, time
+from HTMLParser import HTMLParser
 
 # Enable debug prints 
 logging.basicConfig(level=logging.DEBUG)
@@ -69,7 +71,6 @@ def CacheInsertion(client_req, json_data):
     i = cache.insert()
     i.execute(source=client_req[0]['source'].lower(), location=client_req[0]['location'].lower(), datetime=timestamp, json=json_data)
 
-
 ###############################################################################
 # Validate all required fields of a client request, make sure we have a valid req
 # client_req = [{
@@ -84,14 +85,13 @@ def ValidateClientRequest(client_req):
         location = client_req[0]['location'] 
         
         # validate a proper source and location is set
-        if source in ['metar', 'gfs'] and len(location) > 0:
+        if source in ['metar', 'mav'] and len(location) > 0:
             return True
     except:
         debug("No source in client request")
 
     # invalid client request
     return False
-
 
 ###############################################################################
 # External Weather request handler 
@@ -127,7 +127,7 @@ def ClientRequestHandler(client_req):
         if cacheHit != None:
             response = cacheHit
         else:
-            # pass on client_req to correct handler if no cache hit
+            # Pass on client_req to the correct handler if there's no cache hit
             response = ExternalRequest(client_req)
     else:
         response = json.dumps([{"error": "invalid request"}])
@@ -156,8 +156,26 @@ def get_metar_report(station_id):
         debug("%s", string.join(err.args, ", "))
 
 def get_mav_report(station_id):
-    # TODO implement MAV decoding
-    return json.dumps([{"error": "MAV requests not implemented yet"}])
+    base_url = "http://www.nws.noaa.gov/cgi-bin/mos/getmav.pl?sta="
+    url = base_url + station_id
+    parser = parse_mav_html(station_id)
+    try:
+        req = urllib2.urlopen(url)
+        parser.feed(req.read())
+        return json.dumps([{"error": "MAV requests not implemented yet"}])
+    except:
+        debug("MAV error")
+
+class parse_mav_html(HTMLParser):
+    def __init__(self, station_id):
+        self.station_id = station_id
+        HTMLParser.__init__(self)
+    def handle_data(self, data):
+        regex = re.compile(r'\s+%s\s+GFS\s+MOS\s+GUIDANCE' % self.station_id)
+        if regex.search(data):
+            # TODO
+            debug("MAV requests not implemented yet")
+            #return Mav.Mav(data)
 
 ###############################################################################
 # Application entry point
