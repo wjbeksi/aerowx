@@ -23,7 +23,7 @@ import android.widget.TextView;
 public class MetarActivity extends Activity
 {
 
-	// Temporary settings
+	// TODO: Temporary settings
 	String baseUrl = "http://aerowx.dccmn.com/get_weather";
 	String wxid = "kros";
 

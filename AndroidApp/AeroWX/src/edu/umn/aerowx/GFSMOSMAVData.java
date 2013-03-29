@@ -19,7 +19,8 @@ import android.util.Log;
  */
 public class GFSMOSMAVData
 {
-	/* METAR Data */
+	/* GFSMOSMAV Data */
+	
 	// * Weather Station ID (4 letters) */
 	public String wxid;
 
