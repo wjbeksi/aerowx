@@ -28,7 +28,7 @@ HR_RE = re.compile(r"""HR\s+(\d+)\s(\d+)\s(\d+)\s(\d+)\s(\d+)\s(\d+)\s
                             (\d+)\s(\d+)\s(\d+)""",
                             re.VERBOSE)
 
-NX_RE = re.compile(r"""[N|X]/[N|X]\s\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s
+NX_RE = re.compile(r"""[N|X]/[X|N]\s\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s
                                       (\s\s|-?\d*)\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s
                                       (\s\s|-?\d*)\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s
                                       (\s\s|-?\d*)\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s
