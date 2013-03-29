@@ -432,7 +432,6 @@ class Metar(object):
       return code
                   
   def __str__(self):
-      print 'call __str__'
       return self.string()
 
   def _handleType( self, d ):
