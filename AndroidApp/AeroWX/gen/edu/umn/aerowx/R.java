@@ -24,12 +24,12 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f080020;
-        public static final int ceil=0x7f080012;
+        public static final int action_settings=0x7f080023;
+        public static final int ceilRow=0x7f080012;
         public static final int dewLabel=0x7f080016;
         public static final int dewpoint=0x7f080017;
         public static final int dewptRow=0x7f08000c;
-        public static final int forecastButton=0x7f08001f;
+        public static final int forecastButton=0x7f080022;
         public static final int gfsTitle=0x7f080000;
         public static final int high=0x7f080006;
         public static final int highLabel=0x7f080005;
@@ -38,25 +38,28 @@ public final class R {
         public static final int metarTitle=0x7f080013;
         public static final int periodDate=0x7f080009;
         public static final int periodTime=0x7f08000a;
-        public static final int precip=0x7f08000f;
+        public static final int precipRow=0x7f08000f;
         public static final int pressLabel=0x7f080018;
         public static final int pressure=0x7f080019;
-        public static final int sky=0x7f08000d;
-        public static final int skyLabel=0x7f08001e;
+        public static final int sky=0x7f080021;
+        public static final int skyLabel=0x7f080020;
+        public static final int skyRow=0x7f08000d;
         public static final int station=0x7f080002;
         public static final int stationLabel=0x7f080001;
         public static final int temp=0x7f080015;
         public static final int tempLabel=0x7f080014;
         public static final int tempRow=0x7f08000b;
-        public static final int thund=0x7f080010;
+        public static final int thundRow=0x7f080010;
         public static final int time=0x7f080004;
         public static final int timeLabel=0x7f080003;
-        public static final int vis=0x7f080011;
-        public static final int visLabel=0x7f08001b;
-        public static final int wind=0x7f08000e;
+        public static final int vis=0x7f08001d;
+        public static final int visLabel=0x7f08001c;
+        public static final int visRow=0x7f080011;
+        public static final int wind=0x7f08001b;
         public static final int windLabel=0x7f08001a;
-        public static final int wx=0x7f08001d;
-        public static final int wxLabel=0x7f08001c;
+        public static final int windRow=0x7f08000e;
+        public static final int wx=0x7f08001f;
+        public static final int wxLabel=0x7f08001e;
     }
     public static final class layout {
         public static final int activity_gfs=0x7f030000;

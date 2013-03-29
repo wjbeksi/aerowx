@@ -67,6 +67,25 @@ public class GFSActivity extends Activity
 
 		TableRow dewptRow=(TableRow) findViewById(R.id.dewptRow);
 		((TextView) dewptRow.getVirtualChildAt(periodIndex+1)).setText(period.dewpoint);
+
+		TableRow skyRow=(TableRow) findViewById(R.id.skyRow);
+		((TextView) skyRow.getVirtualChildAt(periodIndex+1)).setText(period.cover);
+
+		TableRow windRow=(TableRow) findViewById(R.id.windRow);
+		((TextView) windRow.getVirtualChildAt(periodIndex+1)).setText(period.wind.direction+"@"+period.wind.speed);
+
+		TableRow precipRow=(TableRow) findViewById(R.id.precipRow);
+		((TextView) precipRow.getVirtualChildAt(periodIndex+1)).setText(period.pop6);
+
+		TableRow thundRow=(TableRow) findViewById(R.id.thundRow);
+		((TextView) thundRow.getVirtualChildAt(periodIndex+1)).setText(period.thund6);
+
+		TableRow visiRow=(TableRow) findViewById(R.id.visRow);
+		((TextView) visiRow.getVirtualChildAt(periodIndex+1)).setText(period.visibility);
+		
+		TableRow ceilRow=(TableRow) findViewById(R.id.ceilRow);
+		((TextView) ceilRow.getVirtualChildAt(periodIndex+1)).setText(period.ceiling);
+
 	}
 
 	@Override
@@ -142,22 +161,22 @@ public class GFSActivity extends Activity
 			gfsMosMavData.periods[i].hour = "7";
 			gfsMosMavData.periods[i].temp = "27";
 			gfsMosMavData.periods[i].dewpoint = "27";
-			gfsMosMavData.periods[i].cover = "";
+			gfsMosMavData.periods[i].cover = "clear";
 			gfsMosMavData.periods[i].wind.direction = "S";
-			gfsMosMavData.periods[i].wind.speed = "-20";
-			gfsMosMavData.periods[i].pop6 = "";
+			gfsMosMavData.periods[i].wind.speed = "20";
+			gfsMosMavData.periods[i].pop6 = "50";
 			gfsMosMavData.periods[i].pop12 = "";
 			gfsMosMavData.periods[i].qpf6 = "";
 			gfsMosMavData.periods[i].qpf12 = "";
-			gfsMosMavData.periods[i].thund6 = "";
+			gfsMosMavData.periods[i].thund6 = "10";
 			gfsMosMavData.periods[i].thund12 = "";
 			gfsMosMavData.periods[i].popz = "";
 			gfsMosMavData.periods[i].pops = "";
 			gfsMosMavData.periods[i].type = "";
 			gfsMosMavData.periods[i].snow = "";
-			gfsMosMavData.periods[i].visibility = "";
+			gfsMosMavData.periods[i].visibility = "15";
 			gfsMosMavData.periods[i].obscurity = "";
-			gfsMosMavData.periods[i].ceiling = "";
+			gfsMosMavData.periods[i].ceiling = "16000";
 		}
 
 		object=gfsMosMavData.toJSONObject();
