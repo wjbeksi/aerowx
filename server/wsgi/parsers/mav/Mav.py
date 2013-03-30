@@ -81,13 +81,13 @@ TYP_RE = re.compile(r"""TYP\s+(\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s
                               (\s*\w)""",
                               re.VERBOSE)
 
-SNW_RE = re.compile(r"""SNW\s\s(\s\s|\d*)\s(\s\s|\d*)\s(\s\s|\d*)\s
-                               (\s\s|\d*)\s(\s\s|\d*)\s(\s\s|\d*)\s
-                               (\s\s|\d*)\s(\s\s|\d*)\s(\s\s|\d*)\s
-                               (\s\s|\d*)\s(\s\s|\d*)\s(\s\s|\d*)\s
-                               (\s\s|\d*)\s(\s\s|\d*)\s(\s\s|\d*)\s
-                               (\s\s|\d*)\s(\s\s|\d*)\s(\s\s|\d*)\s
-                               (\s\s|\d*)\s(\s\s|\d*)\s(\s\s|\d*)""",
+SNW_RE = re.compile(r"""SNW\s\s(\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)""",
                                re.VERBOSE)
 
 CIG_RE = re.compile(r"""CIG\s+(\s*\d+)\s(\s*\d+)\s(\s*\d+)\s(\s*\d+)\s(\s*\d+)\s
@@ -208,13 +208,9 @@ class Mav(object):
             m = TYP_RE.search(message)
             if m:
                 self._handle_typ(m)
-                print 'type: ', self.typ
             m = SNW_RE.search(message)
             if m:
                 self._handle_snw(m)
-                print 'snw: ', self.snw
-            else:
-                print 'NO SNW MATCH'
             m = CIG_RE.search(message)
             if m:
                 self._handle_cig(m)
@@ -258,7 +254,7 @@ class Mav(object):
         Extract the minimum/maximum surface temperature fields.
         """
         for i in range(1,MAX_COLS):
-            self.nx.append(m.group(i))
+            self.nx.append(m.group(i).strip())
 
     def _handle_tmp(self, m):
         """
@@ -307,7 +303,7 @@ class Mav(object):
         Extract the snowfall fields.
         """
         for i in range(1,MAX_COLS):
-            self.snw.append(m.group(i))
+            self.snw.append(m.group(i).strip())
 
     def _handle_cig(self, m):
         """
@@ -353,7 +349,7 @@ class Mav(object):
         return string.join(lines,"\n")
     
     def attach_string_fields(self, lines, h):
-        if self.nx[h] != '  ':
+        if len(self.nx) and self.nx[h] != '':
             lines.append("\t\tnighttime minimum/daytime maximum surface temperature: %s" % self.nx[h])
         lines.append("\t\tsurface temperature: %s" % self.tmp[h])
         lines.append("\t\tsurface dew point: %s" % self.dpt[h])
@@ -361,8 +357,8 @@ class Mav(object):
         lines.append("\t\twind direction: %s" % self.wdr[h])
         lines.append("\t\twind speed: %s" % self.wsp[h])
         lines.append("\t\tprecipitation type: %s" % PRECIPITATION_TYPE[self.typ[h]])
-        #if self.snw[h] != '  ':
-        #    lines.append("\t\tsnowfall: %s" % SNOWFALL_AMOUNT[self.snw[h]])
+        if len(self.snw) and self.snw[h] != '':
+            lines.append("\t\tsnowfall: %s" % SNOWFALL_AMOUNT[self.snw[h]])
         lines.append("\t\tceiling height: %s" % CEILING_HEIGHT[self.cig[h]])
         lines.append("\t\tvisibility: %s" % VISIBILITY[self.vis[h]])
         lines.append("\t\tobstruction to vision: %s" % OBSTRUCTION_TO_VISION[self.obv[h]])
