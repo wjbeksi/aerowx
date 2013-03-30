@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import json, urllib, urllib2
+import json, urllib, urllib2, pprint
 
 url = "http://127.0.0.1:8051"  # Default target
 
@@ -13,7 +13,7 @@ def issue_request(request):
 	response = urllib2.urlopen(req)
 	response_data = response.read()
 
-	return response_data
+	return json.loads(response_data)
 
 def test_1():
 	# Build a standard METAR request
@@ -21,7 +21,7 @@ def test_1():
 	data = [{"source" : "metar", 
              "location" : "kros",
              "datetime" : ""}]
-	print issue_request(data)
+	pprint.pprint(issue_request(data))
 
 def test_2():
 	# Build a standard MAV request
@@ -29,7 +29,7 @@ def test_2():
 	data = [{"source" : "mav", 
              "location" : "kros",
              "datetime" : ""}]
-	print issue_request(data)
+	pprint.pprint(issue_request(data))
 
 
 def test_error_handling():

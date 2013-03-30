@@ -19,9 +19,11 @@ logging.basicConfig(level=logging.DEBUG)
 ###############################################################################
 # Cache global database config
 ###############################################################################
+CACHE_ENABLED = True    # Enable CACHE 
+CACHE_TTL = 5           # Set cache expiration time (in minutes) 
+
 if os.path.exists('/var/www/aerowx/server/wsgi/cache.db'):
-    # we need to use an absolute path for running in apache... not sure where the 
-    # relative path begins... need to fix   
+    # we need to use an absolute path for running in apache
     db = create_engine('sqlite:////var/www/aerowx/server/wsgi/cache.db')
 else:
     # Fall back on relative path
@@ -30,14 +32,13 @@ else:
 
 db.echo = False # set to True for debugging
 metadata = MetaData(db)
+
 # Table Reference
-# cache = Table('cache', metadata,
-#               Column('id', Integer, primary_key=True),
-#               Column('source', String(16)),
-#               Column('location', String(16)),
-#               Column('datetime', Integer),
-#               Column('json', String)
-# )
+#   Column('id', Integer, primary_key=True),
+#   Column('source', String(16)),
+#   Column('location', String(16)),
+#   Column('datetime', Integer),
+#   Column('json', String)
 cache = Table('cache', metadata, autoload=True)
 
 ###############################################################################
@@ -52,9 +53,12 @@ def roundTime(dt=None, roundTo=5):
 # Caching Interface
 ###############################################################################
 def CacheLookup(client_req):
+    if not CACHE_ENABLED:
+        return None
+
     try:
         # determine time cutoff (current time rounded to 5 minute intervals)
-        timestamp = roundTime(datetime.datetime.now(), 5).strftime("%s")
+        timestamp = roundTime(datetime.datetime.now(), CACHE_TTL).strftime("%s")
 
         s = cache.select((cache.c.source == client_req[0]['source'].lower()) & 
                          (cache.c.location == client_req[0]['location'].lower()) & 
@@ -73,9 +77,10 @@ def CacheLookup(client_req):
         return None
 
 def CacheInsertion(client_req, json_data):
-    timestamp = datetime.datetime.now().strftime("%s")
-    i = cache.insert()
-    i.execute(source=client_req[0]['source'].lower(), location=client_req[0]['location'].lower(), datetime=timestamp, json=json_data)
+    if CACHE_ENABLED:
+        timestamp = datetime.datetime.now().strftime("%s")
+        i = cache.insert()
+        i.execute(source=client_req[0]['source'].lower(), location=client_req[0]['location'].lower(), datetime=timestamp, json=json_data)
 
 ###############################################################################
 # Validate all required fields of a client request, make sure we have a valid req
@@ -173,10 +178,9 @@ def get_mav_report(station_id):
     data = parser.return_data()
     debug(data)
     obs = Mav.Mav(data)
-    return obs.json()
-    #return json.dumps([{"error": "MAV requests not implemented yet"}])
-#    except:
- #       debug("MAV error")
+    return obs.json()   
+    #except:
+    #    debug("MAV error")
 
 ###############################################################################
 # HTML parser to get RAW MAV report data from webpage
@@ -199,7 +203,6 @@ class parse_mav_html(HTMLParser):
 # Application entry point
 ###############################################################################
 def application(environ, start_response):
-    
 
     client_req = [{"error": "invalid request"}]
     try:

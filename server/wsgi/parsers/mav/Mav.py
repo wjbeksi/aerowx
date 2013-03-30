@@ -241,6 +241,9 @@ class Mav(object):
     def __init__(self, message):
         """Parse the raw MAV message"""
         self.station_id = None  # 4-character ICAO station code
+        self.time = None        # date time of report
+        self.high = None        # High temperature
+        self.low = None         # Low temperature
         self.dt = []            # Day of the month, denoted by the standard three or four letter abbreviation
         self.hr = []            # Hour of the day in UTC 
         self.nx = []            # Nighttime minimum/daytime maximum surface temperatures 
@@ -590,5 +593,79 @@ class Mav(object):
                   'high' : 'None',
                   'low' : 'None',
                   'periods' : periodArray}
+
+        #populate report with weather data
+
+        # time
+        if self.time:
+            report['time'] = self.time
+        # high
+        if self.high:
+            report['high'] = self.high
+        # low
+        if self.low:
+            report['low'] = self.low
+        # loop over periods
+        loop_date = 0
+
+        for i in range(MAX_COLS - 1):
+            # date
+            report['periods'][i]['date'] = self.dt[loop_date]
+            # hour
+            if len(self.hr) > i and self.hr[i] != '':
+                report['periods'][i]['hour'] = self.hr[i]
+                if self.hr[i] == '21':
+                    loop_date += 1 # inc the date index
+            # temp
+            if len(self.tmp) > i and self.tmp[i] != '':
+                report['periods'][i]['temp'] = self.tmp[i]
+            # dewpoint
+            if len(self.dpt) > i and self.dpt[i] != '':
+                report['periods'][i]['dewpoint'] = self.dpt[i]
+            # cover
+            if len(self.cld) > i and self.cld[i] != '':
+                report['periods'][i]['cover'] = SKY_COVER[self.cld[i]]
+            # wind
+            if len(self.wdr) > i and self.wdr[i] != '':
+                report['periods'][i]['wind']['direction'] = self.wdr[i]
+            if len(self.wsp) > i and self.wsp[i] != '':
+                report['periods'][i]['wind']['speed'] = self.wsp[i]
+                #report['periods'][i]['wind']['gust']
+            # pop6
+            if len(self.p06) > i and self.p06[i] != '':
+                report['periods'][i]['pop6'] = self.p06[i]            
+            # pop12 
+            if len(self.p12) > i and self.p12[i] != '':
+                report['periods'][i]['pop12'] = self.p12[i]   
+            # qpf12
+            if len(self.q12) > i and self.q12[i] != '':
+                report['periods'][i]['qpf12'] = QPF[self.q12[i]]
+            # thund6
+            
+            # thund12
+
+            # popz
+            if len(self.poz) > i and self.poz[i] != '':
+                report['periods'][i]['popz'] = self.poz[i]   
+            # pops
+            if len(self.pos) > i and self.pos[i] != '':
+                report['periods'][i]['pops'] = self.pos[i]   
+            # type
+            if len(self.typ) > i and self.typ[i] != '':
+                report['periods'][i]['type'] = PRECIPITATION_TYPE[self.typ[i]]
+            # snow
+            if len(self.snw) > i and self.snw[i] != '':
+                report['periods'][i]['snow'] = SNOWFALL_AMOUNT[self.snw[i]]
+            # visibility
+            if len(self.vis) > i and self.vis[i] != '':
+                report['periods'][i]['visibility'] = VISIBILITY[self.vis[i]] 
+            # obscurity
+            if len(self.obv) > i and self.obv[i] != '':
+                report['periods'][i]['obscurity'] = OBSTRUCTION_TO_VISION[self.obv[i]]   
+            # ceiling
+            if len(self.cig) > i and self.cig[i] != '':
+                report['periods'][i]['ceiling'] = CEILING_HEIGHT[self.cig[i]]
+            
+         
         #pprint.pprint(report)
         return json.dumps({'mav': report}) 
