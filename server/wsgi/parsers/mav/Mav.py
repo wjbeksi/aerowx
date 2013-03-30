@@ -118,6 +118,32 @@ Q12_RE = re.compile(r"""Q12\s\s(\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
                                (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)""",
                                re.VERBOSE)
 
+POZ_RE = re.compile(r"""POZ\s\s(\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)""",
+                               re.VERBOSE)
+
+POS_RE = re.compile(r"""POS\s\s(\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)""",
+                               re.VERBOSE)
+
 TYP_RE = re.compile(r"""TYP\s+(\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s
                               (\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s
                               (\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s
@@ -227,6 +253,8 @@ class Mav(object):
         self.p12 = []           # PoP during a 12-h period ending at that time 
         self.q06 = []           # Quantitative precipitation forecast (QPF) during a 6-h period ending at that time 
         self.q12 = []           # QPF during a 12-h period ending at that time 
+        self.poz = []           # Conditional probability of freezing pcp occuring at the hour 
+        self.pos = []           # Conditional probability of snow occuring at the hour 
         self.typ = []           # Conditional precipitation type at the hour 
         self.snw = []           # Snowfall categorical forecasts during a 24-h period ending at the indicated time 
         self.cig = []           # Ceiling height categorical forecasts at the hour 
@@ -273,6 +301,12 @@ class Mav(object):
             m = Q12_RE.search(message)
             if m:
                 self._handle_q12(m)
+            m = POZ_RE.search(message)
+            if m:
+                self._handle_poz(m)
+            m = POS_RE.search(message)
+            if m:
+                self._handle_pos(m)
             m = TYP_RE.search(message)
             if m:
                 self._handle_typ(m)
@@ -385,6 +419,20 @@ class Mav(object):
         """
         for i in range(1,MAX_COLS):
             self.q12.append(m.group(i).strip())
+    
+    def _handle_poz(self, m):
+        """
+        Extract the conditional probability of freezing pcp fields.
+        """
+        for i in range(1,MAX_COLS):
+            self.poz.append(m.group(i).strip())
+
+    def _handle_pos(self, m):
+        """
+        Extract the conditional probability of snow fields.
+        """
+        for i in range(1,MAX_COLS):
+            self.pos.append(m.group(i).strip())
 
     def _handle_typ(self, m):
         """
@@ -459,6 +507,10 @@ class Mav(object):
             lines.append("\t\t6 hour QPF: %s" % QPF[self.q06[h]])
         if len(self.q12) and self.q12[h] != '':
             lines.append("\t\t12 hour QPF: %s" % QPF[self.q12[h]])
+        if len(self.poz) and self.poz[h] != '':
+            lines.append("\t\tconditional probability of freezing pcp: %s" % self.poz[h])
+        if len(self.pos) and self.pos[h] != '':
+            lines.append("\t\tconditional probability of snow: %s" % self.pos[h])
         lines.append("\t\tprecipitation type: %s" % PRECIPITATION_TYPE[self.typ[h]])
         if len(self.snw) and self.snw[h] != '':
             lines.append("\t\tsnowfall: %s" % SNOWFALL_AMOUNT[self.snw[h]])
