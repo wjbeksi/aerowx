@@ -74,6 +74,24 @@ WSP_RE = re.compile(r"""WSP\s+(\d+)\s(\d+)\s(\d+)\s(\d+)\s(\d+)\s(\d+)\s
                               (\d+)\s(\d+)\s(\d+)""",
                               re.VERBOSE)
 
+Q06_RE = re.compile(r"""Q06\s\s(\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)""",
+                               re.VERBOSE)
+
+Q12_RE = re.compile(r"""Q12\s\s(\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
+                               (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)""",
+                               re.VERBOSE)
+
 TYP_RE = re.compile(r"""TYP\s+(\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s
                               (\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s
                               (\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s
@@ -129,6 +147,14 @@ VISIBILITY = {"1" : "< 1/2 miles",
               "5" : "3 - 5 miles",
               "6" : "6 miles",
               "7" : "> 6 miles"}
+
+QPF = {"0" : "no precipitation", 
+       "1" : "0.01 to 0.09 inches",
+       "2" : "0.10 to 0.24 inches",
+       "3" : "0.25 to 0.49 inches",
+       "4" : "0.50 to 0.99 inches",
+       "5" : "1.00 to 1.99 inches",
+       "6" : "2.00 inches or greater"}
  
 SKY_COVER = {"CL" : "clear", 
              "FW" : "few > 0 to 2 octas",
@@ -171,6 +197,8 @@ class Mav(object):
         self.cld = []           # Forecast categories of total sky cover valid at that hour 
         self.wdr = []           # Forecasts of the 10-meter wind direction at the hour, given in tens of degrees 
         self.wsp = []           # Forecasts of the 10-meter wind speed at the hour, given in knots 
+        self.q06 = []           # Quantitative precipitation forecast (QPF) during a 6-h period ending at that time 
+        self.q12 = []           # QPF during a 12-h period ending at that time 
         self.typ = []           # Conditional precipitation type at the hour 
         self.snw = []           # Snowfall categorical forecasts during a 24-h period ending at the indicated time 
         self.cig = []           # Ceiling height categorical forecasts at the hour 
@@ -205,6 +233,12 @@ class Mav(object):
             m = WSP_RE.search(message)
             if m:
                 self._handle_wsp(m)
+            m = Q06_RE.search(message)
+            if m:
+                self._handle_q06(m)
+            m = Q12_RE.search(message)
+            if m:
+                self._handle_q12(m)
             m = TYP_RE.search(message)
             if m:
                 self._handle_typ(m)
@@ -221,7 +255,6 @@ class Mav(object):
             if m:
                 self._handle_obv(m)
 
-           
         except Exception, err:
             #raise ParserError(handler.__name__+" failed while processing '"+code+"'\n"+string.join(err.args))
             raise err
@@ -291,6 +324,20 @@ class Mav(object):
         for i in range(1,MAX_COLS):
             self.wsp.append(m.group(i))
 
+    def _handle_q06(self, m):
+        """
+        Extract the 6-h QPF fields.
+        """
+        for i in range(1,MAX_COLS):
+            self.q06.append(m.group(i).strip())
+    
+    def _handle_q12(self, m):
+        """
+        Extract the 12-h QPF fields.
+        """
+        for i in range(1,MAX_COLS):
+            self.q12.append(m.group(i).strip())
+
     def _handle_typ(self, m):
         """
         Extract the precipitation type fields.
@@ -356,6 +403,10 @@ class Mav(object):
         lines.append("\t\tsky cover: %s" % SKY_COVER[self.cld[h]])               
         lines.append("\t\twind direction: %s" % self.wdr[h])
         lines.append("\t\twind speed: %s" % self.wsp[h])
+        if len(self.q06) and self.q06[h] != '':
+            lines.append("\t\t6 hour QPF: %s" % QPF[self.q06[h]])
+        if len(self.q12) and self.q12[h] != '':
+            lines.append("\t\t12 hour QPF: %s" % QPF[self.q12[h]])
         lines.append("\t\tprecipitation type: %s" % PRECIPITATION_TYPE[self.typ[h]])
         if len(self.snw) and self.snw[h] != '':
             lines.append("\t\tsnowfall: %s" % SNOWFALL_AMOUNT[self.snw[h]])
