@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import re
-import sys
+import sys,os
 import json 
 import string
 import logging
@@ -10,6 +10,7 @@ import urllib, urllib2
 from sqlalchemy import *
 from logging import debug
 from parsers.metar import Metar
+from parsers.mav import Mav
 from HTMLParser import HTMLParser
 
 # Enable debug prints 
@@ -18,10 +19,15 @@ logging.basicConfig(level=logging.DEBUG)
 ###############################################################################
 # Cache global database config
 ###############################################################################
-#db = create_engine('sqlite:///cache.db')
-# we need to use an absolute path for running in apache... not sure where the 
-# relative path begins... need to fix
-db = create_engine('sqlite:////var/www/aerowx/server/wsgi/cache.db')
+if os.path.exists('/var/www/aerowx/server/wsgi/cache.db'):
+    # we need to use an absolute path for running in apache... not sure where the 
+    # relative path begins... need to fix   
+    db = create_engine('sqlite:////var/www/aerowx/server/wsgi/cache.db')
+else:
+    # Fall back on relative path
+    debug("Absolute database path not found, using relative path")
+    db = create_engine('sqlite:///cache.db')
+
 db.echo = False # set to True for debugging
 metadata = MetaData(db)
 # Table Reference
@@ -107,7 +113,9 @@ def ExternalRequest(client_req):
         response = get_mav_report(client_req[0]['location'].upper())
 
     # Cache returning data to prevent future web queries
-    CacheInsertion(client_req, response)
+    # Do not cache error responses
+    if not 'error' in response:
+        CacheInsertion(client_req, response)
 
     return response
 
@@ -159,23 +167,33 @@ def get_mav_report(station_id):
     base_url = "http://www.nws.noaa.gov/cgi-bin/mos/getmav.pl?sta="
     url = base_url + station_id
     parser = parse_mav_html(station_id)
-    try:
-        req = urllib2.urlopen(url)
-        parser.feed(req.read())
-        return json.dumps([{"error": "MAV requests not implemented yet"}])
-    except:
-        debug("MAV error")
+    #try:
+    req = urllib2.urlopen(url)
+    a = parser.feed(req.read())
+    data = parser.return_data()
+    debug(data)
+    obs = Mav.Mav(data)
+    return obs.json()
+    #return json.dumps([{"error": "MAV requests not implemented yet"}])
+#    except:
+ #       debug("MAV error")
 
+###############################################################################
+# HTML parser to get RAW MAV report data from webpage
+###############################################################################
 class parse_mav_html(HTMLParser):
+    returnData = ""
     def __init__(self, station_id):
         self.station_id = station_id
         HTMLParser.__init__(self)
     def handle_data(self, data):
         regex = re.compile(r'\s+%s\s+GFS\s+MOS\s+GUIDANCE' % self.station_id)
         if regex.search(data):
-            # TODO
-            debug("MAV requests not implemented yet")
-            #return Mav.Mav(data)
+            # Set data to be returned
+            self.returnData = data
+    def return_data(self):
+        # return parsed data requested
+        return self.returnData 
 
 ###############################################################################
 # Application entry point

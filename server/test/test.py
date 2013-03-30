@@ -23,6 +23,15 @@ def test_1():
              "datetime" : ""}]
 	print issue_request(data)
 
+def test_2():
+	# Build a standard MAV request
+	print "# Build a standard MAV request"
+	data = [{"source" : "mav", 
+             "location" : "kros",
+             "datetime" : ""}]
+	print issue_request(data)
+
+
 def test_error_handling():
 	print """
 For the following tests expect an error JSON response
@@ -74,5 +83,6 @@ This is testing the error handling, we should not see unhandled exceptions
 	print issue_request(data)
 
 # Run tests
-test_1()
+#test_1()
+test_2()
 #test_error_handling()

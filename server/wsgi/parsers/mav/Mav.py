@@ -8,6 +8,7 @@ encoded by a single GFS MOS MAV message.
 """
 import re
 import json
+import pprint
 
 MAX_COLS = 22  # Number of columns in a MAV message
 
@@ -126,9 +127,53 @@ class Mav(object):
             if m:
                 self._handle_wsp(m)
 
+           
         except Exception, err:
             #raise ParserError(handler.__name__+" failed while processing '"+code+"'\n"+string.join(err.args))
             raise err
+
+    @staticmethod
+    def createEmptyPeriodArray():
+        periods = [None] * (MAX_COLS - 1)
+        for i in range(MAX_COLS - 1):
+            periods[i] = {'date' : 'None',
+                          'hour' : 'None',
+                          'temp' : 'None',
+                          'dewpoint' : 'None',
+                          'cover' : 'None',
+                          'wind' : {'direction' : 'None',
+                                    'speed' : 'None',
+                                    'gust' : 'None',
+                                    },
+                          'pop6' : 'None',
+                          'pop12' : 'None',
+                          'qpf12' : 'None',
+                          'thund6' : 'None',
+                          'thund12' : 'None',
+                          'popz' : 'None',
+                          'pops' : 'None',
+                          'type' : 'None',
+                          'snow' : 'None',
+                          'visibility' : 'None',
+                          'obscurity' : 'None',
+                          'ceiling' : 'None'
+                          }
+        return periods
+
+    def json(self):
+
+        periodArray = Mav.createEmptyPeriodArray()
+        report = {'wxid' : self.station_id,
+                  'time' : 'None',
+                  'high' : 'None',
+                  'low' : 'None',
+                  'periods' : periodArray
+                  }
+
+        #pprint.pprint(report)
+        return json.dumps({'mav': report}) 
+
+
 
     def _handle_dt(self, m):
         """
