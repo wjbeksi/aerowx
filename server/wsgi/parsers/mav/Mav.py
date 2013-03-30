@@ -74,6 +74,32 @@ WSP_RE = re.compile(r"""WSP\s+(\d+)\s(\d+)\s(\d+)\s(\d+)\s(\d+)\s(\d+)\s
                               (\d+)\s(\d+)\s(\d+)""",
                               re.VERBOSE)
 
+P06_RE = re.compile(r"""P06\s\s(\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)""",
+                               re.VERBOSE)
+
+P12_RE = re.compile(r"""P12\s\s(\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
+                               (\s\s|\s\d|\d\d)""",
+                               re.VERBOSE)
+
 Q06_RE = re.compile(r"""Q06\s\s(\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
                                (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
                                (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
@@ -197,6 +223,8 @@ class Mav(object):
         self.cld = []           # Forecast categories of total sky cover valid at that hour 
         self.wdr = []           # Forecasts of the 10-meter wind direction at the hour, given in tens of degrees 
         self.wsp = []           # Forecasts of the 10-meter wind speed at the hour, given in knots 
+        self.p06 = []           # Probability of precipitation (PoP) during a 6-h period ending at that time 
+        self.p12 = []           # PoP during a 12-h period ending at that time 
         self.q06 = []           # Quantitative precipitation forecast (QPF) during a 6-h period ending at that time 
         self.q12 = []           # QPF during a 12-h period ending at that time 
         self.typ = []           # Conditional precipitation type at the hour 
@@ -233,6 +261,12 @@ class Mav(object):
             m = WSP_RE.search(message)
             if m:
                 self._handle_wsp(m)
+            m = P06_RE.search(message)
+            if m:
+                self._handle_p06(m)
+            m = P12_RE.search(message)
+            if m:
+                self._handle_p12(m)
             m = Q06_RE.search(message)
             if m:
                 self._handle_q06(m)
@@ -324,6 +358,20 @@ class Mav(object):
         for i in range(1,MAX_COLS):
             self.wsp.append(m.group(i))
 
+    def _handle_p06(self, m):
+        """
+        Extract the 6-h PoP fields.
+        """
+        for i in range(1,MAX_COLS):
+            self.p06.append(m.group(i).strip())
+    
+    def _handle_p12(self, m):
+        """
+        Extract the 12-h PoP fields.
+        """
+        for i in range(1,MAX_COLS):
+            self.p12.append(m.group(i).strip())
+
     def _handle_q06(self, m):
         """
         Extract the 6-h QPF fields.
@@ -403,6 +451,10 @@ class Mav(object):
         lines.append("\t\tsky cover: %s" % SKY_COVER[self.cld[h]])               
         lines.append("\t\twind direction: %s" % self.wdr[h])
         lines.append("\t\twind speed: %s" % self.wsp[h])
+        if len(self.p06) and self.p06[h] != '':
+            lines.append("\t\t6 hour PoP: %s" % self.p06[h])
+        if len(self.p12) and self.p12[h] != '':
+            lines.append("\t\t12 hour PoP: %s" % self.p12[h])
         if len(self.q06) and self.q06[h] != '':
             lines.append("\t\t6 hour QPF: %s" % QPF[self.q06[h]])
         if len(self.q12) and self.q12[h] != '':
