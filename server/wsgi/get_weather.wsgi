@@ -172,15 +172,15 @@ def get_mav_report(station_id):
     base_url = "http://www.nws.noaa.gov/cgi-bin/mos/getmav.pl?sta="
     url = base_url + station_id
     parser = parse_mav_html(station_id)
-    #try:
-    req = urllib2.urlopen(url)
-    a = parser.feed(req.read())
-    data = parser.return_data()
-    debug(data)
-    obs = Mav.Mav(data)
-    return obs.json()   
-    #except:
-    #    debug("MAV error")
+    try:
+        req = urllib2.urlopen(url)
+        a = parser.feed(req.read())
+        data = parser.return_data()
+        debug(data)
+        obs = Mav.Mav(data)
+        return obs.json()   
+    except:
+        debug("MAV error")
 
 ###############################################################################
 # HTML parser to get RAW MAV report data from webpage
