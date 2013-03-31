@@ -118,74 +118,78 @@ public class GFSActivity extends Activity
 		JSONObject requestObject = new JSONObject();
 		requestObject.put("location", wxid);
 		requestObject.put("time", "");
-		requestObject.put("source", "gfs");
+		requestObject.put("source", "mav");
 
 		// The server want's it's request(s) in an array.
 		JSONArray requestArray = new JSONArray();
 		requestArray.put(requestObject);
 
-//		Object responseObject = Utils.postJSON(baseUrl, requestArray);
-//
+		Object responseObject = Utils.postJSON(baseUrl, requestArray);
+
 //		// At this point, all we know is that we received back a JSONArray or
 //		// JSONObject
 		JSONObject object = null;
-//		if (responseObject instanceof JSONArray)
-//		{
-//			JSONArray array = (JSONArray) responseObject;
-//			if (array.length() < 1)
-//			{
-//				throw new Exception("Server returned empty JSON Array");
-//			}
-//
-//			// Grab the first object in the array
-//			object = array.getJSONObject(0);
-//		} else
-//		{
-//			// It's just a plain old object. Treat it as METAR data.
-//			object = (JSONObject) responseObject;
-//		}
-
-		// TODO: Fake GFS Data
-		GFSMOSMAVData gfsMosMavData = new GFSMOSMAVData();
-
-		// first the required fields
-		gfsMosMavData.wxid = "kros";
-		gfsMosMavData.time = "19:00";
-		gfsMosMavData.high = "27";
-		gfsMosMavData.low = "25";
-
-		for (int i = 0; i < 4; ++i)
+		if (responseObject instanceof JSONArray)
 		{
-			gfsMosMavData.periods[i]=gfsMosMavData.new Period();
-			gfsMosMavData.periods[i].date = "1/1/2013";
-			gfsMosMavData.periods[i].hour = "7";
-			gfsMosMavData.periods[i].temp = "27";
-			gfsMosMavData.periods[i].dewpoint = "27";
-			gfsMosMavData.periods[i].cover = "clear";
-			gfsMosMavData.periods[i].wind.direction = "S";
-			gfsMosMavData.periods[i].wind.speed = "20";
-			gfsMosMavData.periods[i].pop6 = "50";
-			gfsMosMavData.periods[i].pop12 = "";
-			gfsMosMavData.periods[i].qpf6 = "";
-			gfsMosMavData.periods[i].qpf12 = "";
-			gfsMosMavData.periods[i].thund6 = "10";
-			gfsMosMavData.periods[i].thund12 = "";
-			gfsMosMavData.periods[i].popz = "";
-			gfsMosMavData.periods[i].pops = "";
-			gfsMosMavData.periods[i].type = "";
-			gfsMosMavData.periods[i].snow = "";
-			gfsMosMavData.periods[i].visibility = "15";
-			gfsMosMavData.periods[i].obscurity = "";
-			gfsMosMavData.periods[i].ceiling = "16000";
+			JSONArray array = (JSONArray) responseObject;
+			if (array.length() < 1)
+			{
+				throw new Exception("Server returned empty JSON Array");
+			}
+
+			// Grab the first object in the array
+			object = array.getJSONObject(0);
+		} else
+		{
+			// It's just a plain old object. Treat it as METAR data.
+			object = (JSONObject) responseObject;
 		}
 
-		object=gfsMosMavData.toJSONObject();
+		// TODO: Fake GFS Data
+//		GFSMOSMAVData gfsMosMavData = new GFSMOSMAVData();
+//
+//		// first the required fields
+//		gfsMosMavData.wxid = "kros";
+//		gfsMosMavData.time = "19:00";
+//		gfsMosMavData.high = "27";
+//		gfsMosMavData.low = "25";
+//
+//		for (int i = 0; i < 4; ++i)
+//		{
+//			gfsMosMavData.periods[i]=gfsMosMavData.new Period();
+//			gfsMosMavData.periods[i].date = "1/1/2013";
+//			gfsMosMavData.periods[i].hour = "7";
+//			gfsMosMavData.periods[i].temp = "27";
+//			gfsMosMavData.periods[i].dewpoint = "27";
+//			gfsMosMavData.periods[i].cover = "clear";
+//			gfsMosMavData.periods[i].wind.direction = "S";
+//			gfsMosMavData.periods[i].wind.speed = "20";
+//			gfsMosMavData.periods[i].pop6 = "50";
+//			gfsMosMavData.periods[i].pop12 = "";
+//			gfsMosMavData.periods[i].qpf6 = "";
+//			gfsMosMavData.periods[i].qpf12 = "";
+//			gfsMosMavData.periods[i].thund6 = "10";
+//			gfsMosMavData.periods[i].thund12 = "";
+//			gfsMosMavData.periods[i].popz = "";
+//			gfsMosMavData.periods[i].pops = "";
+//			gfsMosMavData.periods[i].type = "";
+//			gfsMosMavData.periods[i].snow = "";
+//			gfsMosMavData.periods[i].visibility = "15";
+//			gfsMosMavData.periods[i].obscurity = "";
+//			gfsMosMavData.periods[i].ceiling = "16000";
+//		}
+//
+//		object=gfsMosMavData.toJSONObject();
 		
 		// If the object has the key "error", throw up
 		if (object.has("error"))
 		{
 			throw new Exception("Server returned error: "
 					+ object.getString("error"));
+		}
+		else if (object.has("mav"))
+		{
+			object=(JSONObject) object.get("mav");
 		}
 
 		gfsData = new GFSMOSMAVData(object);
