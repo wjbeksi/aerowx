@@ -610,7 +610,8 @@ class Mav(object):
 
         for i in range(MAX_COLS - 1):
             # date
-            report['periods'][i]['date'] = self.dt[loop_date]
+            if len(self.dt) > loop_date:
+                report['periods'][i]['date'] = self.dt[loop_date]
             # hour
             if len(self.hr) > i and self.hr[i] != '':
                 report['periods'][i]['hour'] = self.hr[i]
