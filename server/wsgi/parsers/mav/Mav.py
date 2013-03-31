@@ -606,17 +606,22 @@ class Mav(object):
         if self.low:
             report['low'] = self.low
         # loop over periods
-        loop_date = 0
+        date_index = 0
+        prev_hr = 0
 
         for i in range(MAX_COLS - 1):
-            # date
-            if len(self.dt) > loop_date:
-                report['periods'][i]['date'] = self.dt[loop_date]
             # hour
             if len(self.hr) > i and self.hr[i] != '':
                 report['periods'][i]['hour'] = self.hr[i]
-                if self.hr[i] == '21':
-                    loop_date += 1 # inc the date index
+                # check if we need to increment the date index
+                if i > 0 and int(prev_hr) > int(self.hr[i]): 
+                    date_index += 1 # inc the date index
+                # save prev_hr for next comparison
+                prev_hr = self.hr[i]
+
+            # date
+            if len(self.dt) > date_index:
+                report['periods'][i]['date'] = self.dt[date_index]
             # temp
             if len(self.tmp) > i and self.tmp[i] != '':
                 report['periods'][i]['temp'] = self.tmp[i]
