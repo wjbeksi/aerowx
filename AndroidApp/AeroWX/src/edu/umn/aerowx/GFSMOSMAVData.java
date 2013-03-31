@@ -59,8 +59,8 @@ public class GFSMOSMAVData
 		// All these are required in a METAR message
 		wxid = object.getString("wxid");
 		time = object.getString("time");
-		high = object.getString("high");
-		low = object.getString("low");
+		high = object.optString("high");
+		low = object.optString("low");
 
 		periods = getPeriodsArray(object.getJSONArray("periods"));
 	}
@@ -282,25 +282,25 @@ public class GFSMOSMAVData
 		 */
 		public Period(JSONObject object) throws JSONException
 		{
-			date = object.getString("date");
-			hour = object.getString("hour");
-			temp = object.getString("temp");
-			dewpoint = object.getString("dewpoint");
-			cover = object.getString("cover");
+			date = object.optString("date");
+			hour = object.optString("hour");
+			temp = object.optString("temp");
+			dewpoint = object.optString("dewpoint");
+			cover = object.optString("cover");
 			wind = new Wind(object.getJSONObject("wind"));
-			pop6 = object.getString("pop6");
-			pop12 = object.getString("pop12");
-			qpf6 = object.getString("qpf6");
-			qpf12 = object.getString("qpf12");
-			thund6 = object.getString("thund6");
-			thund12 = object.getString("thund12");
-			popz = object.getString("popz");
-			pops = object.getString("pops");
-			type = object.getString("type");
-			snow = object.getString("snow");
-			visibility = object.getString("visibility");
-			obscurity = object.getString("obscurity");
-			ceiling = object.getString("ceiling");
+			pop6 = object.optString("pop6");
+			pop12 = object.optString("pop12");
+			qpf6 = object.optString("qpf6");
+			qpf12 = object.optString("qpf12");
+			thund6 = object.optString("thund6");
+			thund12 = object.optString("thund12");
+			popz = object.optString("popz");
+			pops = object.optString("pops");
+			type = object.optString("type");
+			snow = object.optString("snow");
+			visibility = object.optString("visibility");
+			obscurity = object.optString("obscurity");
+			ceiling = object.optString("ceiling");
 		}
 
 		/**
@@ -687,8 +687,8 @@ public class GFSMOSMAVData
 		 */
 		public Wind(JSONObject object) throws JSONException
 		{
-			direction = object.getString("direction");
-			speed = object.getString("speed");
+			direction = object.optString("direction");
+			speed = object.optString("speed");
 			gust = object.optString("gust", null);
 		}
 
