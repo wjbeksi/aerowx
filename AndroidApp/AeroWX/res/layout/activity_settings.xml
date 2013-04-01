@@ -9,7 +9,7 @@
     tools:context=".SettingsActivity" >
 
     <TextView
-        android:id="@+id/metarTitle"
+        android:id="@+id/settingsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/metarTitle"
+        android:layout_below="@+id/settingsTitle"
         android:layout_margin="10dp"
         android:ems="10"
         android:inputType="none"
@@ -38,10 +38,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/metarTitle"
+        android:layout_below="@+id/settingsTitle"
         android:layout_margin="2dp"
         android:ems="10"
-        android:inputType="text" >
+        android:inputType="text"
+        android:lines="1" >
 
         <requestFocus />
     </EditText>

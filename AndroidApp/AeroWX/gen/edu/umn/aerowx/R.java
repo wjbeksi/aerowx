@@ -24,9 +24,9 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f080021;
-        public static final int baseURL=0x7f080020;
-        public static final int baseURLLabel=0x7f08001f;
+        public static final int action_settings=0x7f080022;
+        public static final int baseURL=0x7f080021;
+        public static final int baseURLLabel=0x7f080020;
         public static final int ceilRow=0x7f08000c;
         public static final int dewLabel=0x7f080012;
         public static final int dewpoint=0x7f080013;
@@ -39,6 +39,7 @@ public final class R {
         public static final int precipRow=0x7f080009;
         public static final int pressLabel=0x7f080014;
         public static final int pressure=0x7f080015;
+        public static final int settingsTitle=0x7f08001f;
         public static final int sky=0x7f08001d;
         public static final int skyLabel=0x7f08001c;
         public static final int skyRow=0x7f080007;
