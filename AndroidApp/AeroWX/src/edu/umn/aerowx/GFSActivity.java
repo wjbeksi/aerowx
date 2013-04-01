@@ -5,8 +5,6 @@ import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import edu.umn.aerowx.GFSMOSMAVData.Period;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -14,9 +12,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.TableRow;
 import android.widget.TextView;
+import edu.umn.aerowx.GFSMOSMAVData.Period;
 
 public class GFSActivity extends Activity
 {
@@ -96,6 +95,18 @@ public class GFSActivity extends Activity
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.action_settings:
+	            doSettings();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
 	/**
 	 * request METAR data from server.
 	 * 
@@ -145,42 +156,6 @@ public class GFSActivity extends Activity
 			object = (JSONObject) responseObject;
 		}
 
-		// TODO: Fake GFS Data
-//		GFSMOSMAVData gfsMosMavData = new GFSMOSMAVData();
-//
-//		// first the required fields
-//		gfsMosMavData.wxid = "kros";
-//		gfsMosMavData.time = "19:00";
-//		gfsMosMavData.high = "27";
-//		gfsMosMavData.low = "25";
-//
-//		for (int i = 0; i < 4; ++i)
-//		{
-//			gfsMosMavData.periods[i]=gfsMosMavData.new Period();
-//			gfsMosMavData.periods[i].date = "1/1/2013";
-//			gfsMosMavData.periods[i].hour = "7";
-//			gfsMosMavData.periods[i].temp = "27";
-//			gfsMosMavData.periods[i].dewpoint = "27";
-//			gfsMosMavData.periods[i].cover = "clear";
-//			gfsMosMavData.periods[i].wind.direction = "S";
-//			gfsMosMavData.periods[i].wind.speed = "20";
-//			gfsMosMavData.periods[i].pop6 = "50";
-//			gfsMosMavData.periods[i].pop12 = "";
-//			gfsMosMavData.periods[i].qpf6 = "";
-//			gfsMosMavData.periods[i].qpf12 = "";
-//			gfsMosMavData.periods[i].thund6 = "10";
-//			gfsMosMavData.periods[i].thund12 = "";
-//			gfsMosMavData.periods[i].popz = "";
-//			gfsMosMavData.periods[i].pops = "";
-//			gfsMosMavData.periods[i].type = "";
-//			gfsMosMavData.periods[i].snow = "";
-//			gfsMosMavData.periods[i].visibility = "15";
-//			gfsMosMavData.periods[i].obscurity = "";
-//			gfsMosMavData.periods[i].ceiling = "16000";
-//		}
-//
-//		object=gfsMosMavData.toJSONObject();
-		
 		// If the object has the key "error", throw up
 		if (object.has("error"))
 		{
@@ -225,12 +200,11 @@ public class GFSActivity extends Activity
 
 	}
 
-    /** Called when the user clicks the Send button */
-    public void doCurrent(View view) {
-        // Do something in response to button
-    	
-    	Intent intent = new Intent(this, MetarActivity.class);
-        startActivity(intent);
-    }
+
+	private void doSettings()
+	{
+		Intent intent = new Intent(this, SettingsActivity.class);
+	    startActivity(intent);
+	}
 
 }

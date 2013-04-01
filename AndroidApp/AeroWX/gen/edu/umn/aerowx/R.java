@@ -24,7 +24,9 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f080023;
+        public static final int action_settings=0x7f080025;
+        public static final int baseURL=0x7f080024;
+        public static final int baseURLLabel=0x7f080023;
         public static final int ceilRow=0x7f080012;
         public static final int dewLabel=0x7f080016;
         public static final int dewpoint=0x7f080017;
@@ -64,10 +66,12 @@ public final class R {
     public static final class layout {
         public static final int activity_gfs=0x7f030000;
         public static final int activity_metar=0x7f030001;
+        public static final int activity_settings=0x7f030002;
     }
     public static final class menu {
         public static final int gf=0x7f070000;
         public static final int main=0x7f070001;
+        public static final int settings=0x7f070002;
     }
     public static final class string {
         public static final int AeroWX=0x7f050002;
@@ -80,21 +84,23 @@ public final class R {
         public static final int Precip=0x7f050011;
         public static final int Pressure=0x7f050007;
         public static final int Sky=0x7f05000b;
-        /**   METAR field labels 
+        /**  METAR field labels 
          */
         public static final int Station=0x7f050003;
         public static final int Temp=0x7f050005;
         public static final int Thund=0x7f050013;
         public static final int Time=0x7f050004;
+        public static final int URL=0x7f050016;
         public static final int Visi=0x7f050012;
         public static final int Visibility=0x7f050009;
         public static final int Weather=0x7f05000a;
         public static final int Wind=0x7f050008;
         public static final int action_settings=0x7f050001;
         public static final int app_name=0x7f050000;
-        /**   GFS/MOS/MAV field labels 
+        /**  GFS/MOS/MAV field labels 
          */
         public static final int title_activity_gfs=0x7f05000d;
+        public static final int title_activity_settings=0x7f050015;
     }
     public static final class style {
         /** 

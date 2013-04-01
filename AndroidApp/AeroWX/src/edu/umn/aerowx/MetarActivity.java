@@ -12,8 +12,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -96,6 +96,18 @@ public class MetarActivity extends Activity
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.action_settings:
+	            doSettings();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
 	/**
 	 * request METAR data from server.
 	 * 
@@ -192,4 +204,10 @@ public class MetarActivity extends Activity
     	Intent intent = new Intent(this, GFSActivity.class);
         startActivity(intent);
     }
+
+	private void doSettings()
+	{
+		Intent intent = new Intent(this, SettingsActivity.class);
+	    startActivity(intent);
+	}
 }
