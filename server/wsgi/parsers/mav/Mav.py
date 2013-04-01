@@ -34,29 +34,53 @@ HR_RE = re.compile(r"""HR\s+(\d+)\s(\d+)\s(\d+)\s(\d+)\s(\d+)\s(\d+)\s
                             (\d+)\s(\d+)\s(\d+)""",
                             re.VERBOSE)
 
-NX_RE = re.compile(r"""[N|X]/[X|N]\s\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s
-                                      (\s\s|-?\d*)\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s
-                                      (\s\s|-?\d*)\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s
-                                      (\s\s|-?\d*)\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s
-                                      (\s\s|-?\d*)\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s
-                                      (\s\s|-?\d*)\s(\s\s|-?\d*)\s(\s\s|-?\d*)\s
-                                      (\s\s|-?\d*)\s(\s\s|-?\d*)\s(\s\s|-?\d*)""",
-                                      re.VERBOSE)
+NX_RE = re.compile(r"""[N|X]/[X|N]\s(\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)
+                                    (\d\d\d|[\s|-]\d\d|\s[\s|-]\d|\s\s\s)""",
+                                    re.VERBOSE)
 
-TMP_RE = re.compile(r"""TMP\s+(\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s
-                              (\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s
-                              (\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s
-                              (\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s
-                              (\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s
-                              (\s*-?\d+)""",
+TMP_RE = re.compile(r"""TMP\s+(\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)""",
                               re.VERBOSE)
 
-DPT_RE = re.compile(r"""DPT\s+(\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s
-                              (\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s
-                              (\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s
-                              (\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s
-                              (\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s(\s*-?\d+)\s
-                              (\s*-?\d+)""",
+DPT_RE = re.compile(r"""DPT\s+(\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)(\d\d\d|\s*-?\d\d|\s*-?\d)
+                              (\d\d\d|\s*-?\d\d|\s*-?\d)""",
                               re.VERBOSE)
 
 CLD_RE = re.compile(r"""CLD\s+(\w+)\s(\w+)\s(\w+)\s(\w+)\s(\w+)\s(\w+)\s(\w+)\s
@@ -124,31 +148,31 @@ T06_RE = re.compile(r"T06\s\s(.+)")
 
 T12_RE = re.compile(r"T12\s\s(.+)")
 
-POZ_RE = re.compile(r"""POZ\s\s(\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)""",
-                               re.VERBOSE)
+POZ_RE = re.compile(r"""POZ\s+(\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)""",
+                              re.VERBOSE)
 
-POS_RE = re.compile(r"""POS\s\s(\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
-                               (\s\s|\s\d|\d\d)""",
-                               re.VERBOSE)
+POS_RE = re.compile(r"""POS\s+(\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)(\d\d\d|\s\d\d|\s\s\d)
+                              (\d\d\d|\s\d\d|\s\s\d)""",
+                              re.VERBOSE)
 
 TYP_RE = re.compile(r"""TYP\s+(\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s
                               (\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s(\s*\w)\s
@@ -390,7 +414,7 @@ class Mav(object):
         Extract the surface temperature fields.
         """
         for i in range(1,MAX_COLS):
-            self.tmp.append(m.group(i))
+            self.tmp.append(m.group(i).strip())
 
     def _handle_dpt(self, m):
         """
