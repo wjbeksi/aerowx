@@ -43,9 +43,6 @@ public class GFSActivity extends Activity
 		}
 		
 		((TextView) findViewById(R.id.station)).setText(gfs.wxid);
-		((TextView) findViewById(R.id.time)).setText(gfs.time);
-		((TextView) findViewById(R.id.high)).setText(gfs.high);
-		((TextView) findViewById(R.id.low)).setText(gfs.low);
 		
 		for (int i=0; i<4; ++i)
 		{
@@ -91,7 +88,7 @@ public class GFSActivity extends Activity
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.gf, menu);
+		getMenuInflater().inflate(R.menu.gfs, menu);
 		return true;
 	}
 

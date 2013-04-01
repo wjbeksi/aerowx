@@ -45,88 +45,13 @@
         android:inputType="none" >
     </TextView>
 
-    <TextView
-        android:id="@+id/timeLabel"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/stationLabel"
-        android:layout_margin="2dp"
-        android:ems="10"
-        android:inputType="none"
-        android:text="@string/Time" >
-    </TextView>
-
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/timeLabel"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="2dp"
-        android:layout_toRightOf="@+id/timeLabel"
-        android:ems="10"
-        android:inputType="none" >
-    </TextView>
-
-    <TextView
-        android:id="@+id/highLabel"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/timeLabel"
-        android:layout_margin="2dp"
-        android:ems="10"
-        android:inputType="none"
-        android:text="@string/High" >
-    </TextView>
-
-    <TextView
-        android:id="@+id/high"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/highLabel"
-        android:layout_margin="2dp"
-        android:layout_toRightOf="@+id/highLabel"
-        android:ems="10"
-        android:inputType="none" >
-    </TextView>
-
-    <TextView
-        android:id="@+id/lowLabel"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/highLabel"
-        android:layout_alignParentStart="true"
-        android:layout_margin="2dp"
-        android:layout_toRightOf="@+id/high"
-        android:ems="10"
-        android:inputType="none"
-        android:text="@string/Low" />
-
-    <TextView
-        android:id="@+id/low"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/highLabel"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="2dp"
-        android:layout_toRightOf="@+id/lowLabel"
-        android:ems="10"
-        android:inputType="none" >
-    </TextView>
-
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/highLabel"
+        android:layout_alignLeft="@+id/stationLabel"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/highLabel" >
+        android:layout_below="@+id/stationLabel" >
 
         <TableRow
             android:id="@+id/periodDate"
