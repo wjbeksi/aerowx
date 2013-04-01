@@ -24,6 +24,8 @@ class ParserError(Exception):
 
 STATION_RE = re.compile(r"([A-Z][A-Z0-9]{3})\s+")
 
+TIMESTAMP_RE = re.compile(r"\s+GFS\sMOS\sGUIDANCE\s+(\d+/\d+/\d+\s+\d+\s+UTC)")
+
 DT_RE = re.compile(r"DT\s+(.+)")
 
 HR_RE = re.compile(r"""HR\s+(\d+)\s(\d+)\s(\d+)\s(\d+)\s(\d+)\s(\d+)\s
@@ -117,6 +119,10 @@ Q12_RE = re.compile(r"""Q12\s\s(\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
                                (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)\s
                                (\s\s|\s\d)\s(\s\s|\s\d)\s(\s\s|\s\d)""",
                                re.VERBOSE)
+
+T06_RE = re.compile(r"T06\s\s(.+)")
+
+T12_RE = re.compile(r"T12\s\s(.+)")
 
 POZ_RE = re.compile(r"""POZ\s\s(\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
                                (\s\s|\s\d|\d\d)\s(\s\s|\s\d|\d\d)\s
@@ -231,6 +237,10 @@ PRECIPITATION_TYPE = {"S" : "pure snow or snow grains",
                       "Z" : "freezing rain/drizzle, ice pellets, or anything mixed with freezing precip",
                       "R" : "pure rain/drizzle or rain mixed with snow"}
 
+POSITION_TO_HOUR = {1 : 0, 4 : 1, 7 : 2, 10 : 3, 13 : 4, 16 : 5, 19 : 6, 22 : 7, 
+                    25 : 8, 28 : 9, 31 : 10, 34 : 11, 37 : 12, 40 : 13, 43 : 14,
+                    46 : 15, 49 : 16, 52 : 17, 55 : 18, 58 : 19, 61 : 20}
+
 # MAV report objects
 
 debug = False
@@ -241,7 +251,7 @@ class Mav(object):
     def __init__(self, message):
         """Parse the raw MAV message"""
         self.station_id = None  # 4-character ICAO station code
-        self.time = None        # date time of report
+        self.time = None        # Timestamp of report
         self.high = None        # High temperature
         self.low = None         # Low temperature
         self.dt = []            # Day of the month, denoted by the standard three or four letter abbreviation
@@ -256,8 +266,10 @@ class Mav(object):
         self.p12 = []           # PoP during a 12-h period ending at that time 
         self.q06 = []           # Quantitative precipitation forecast (QPF) during a 6-h period ending at that time 
         self.q12 = []           # QPF during a 12-h period ending at that time 
-        self.poz = []           # Conditional probability of freezing pcp occuring at the hour 
-        self.pos = []           # Conditional probability of snow occuring at the hour 
+        self.t06 = []           # Probability of thunderstorms/conditional probability of severe thunderstorms for the 6-hr 
+        self.t12 = []           # Probability of thunderstorms/conditional probability of severe thunderstorms for the 12-hr period 
+        self.poz = []           # Conditional probability of freezing pcp occurring at the hour 
+        self.pos = []           # Conditional probability of snow occurring at the hour 
         self.typ = []           # Conditional precipitation type at the hour 
         self.snw = []           # Snowfall categorical forecasts during a 24-h period ending at the indicated time 
         self.cig = []           # Ceiling height categorical forecasts at the hour 
@@ -268,6 +280,9 @@ class Mav(object):
             m = STATION_RE.search(message)
             if m:
                 self._handle_station(m)
+            m = TIMESTAMP_RE.search(message)
+            if m:
+                self._handle_timestamp(m)
             m = DT_RE.search(message)
             if m:
                 self._handle_dt(m)
@@ -304,6 +319,12 @@ class Mav(object):
             m = Q12_RE.search(message)
             if m:
                 self._handle_q12(m)
+            m = T06_RE.search(message)
+            if m:
+                self._handle_t06(m)
+            m = T12_RE.search(message)
+            if m:
+                self._handle_t12(m)
             m = POZ_RE.search(message)
             if m:
                 self._handle_poz(m)
@@ -327,7 +348,6 @@ class Mav(object):
                 self._handle_obv(m)
 
         except Exception, err:
-            #raise ParserError(handler.__name__+" failed while processing '"+code+"'\n"+string.join(err.args))
             raise err
 
     def __str__(self):
@@ -339,6 +359,11 @@ class Mav(object):
         """
         self.station_id = m.group(1)
 
+    def _handle_timestamp(self, m):
+        """
+        Extract the message timestamp.
+        """
+        self.time = m.group(1)
     
     def _handle_dt(self, m):
         """
@@ -422,6 +447,24 @@ class Mav(object):
         """
         for i in range(1,MAX_COLS):
             self.q12.append(m.group(i).strip())
+
+    def _handle_t06(self, m):
+        """
+        Extract the 6-h thunderstorm probability fields.
+        """
+        for i in range(1,MAX_COLS):
+            self.t06.append('')
+        for m in re.finditer(r"(\d+/)(\s\d|\d\d)", m.group(1)):
+            self.t06[POSITION_TO_HOUR[m.end()-1]] = m.group(1) + m.group(2).strip()
+
+    def _handle_t12(self, m):
+        """
+        Extract the 12-h thunderstorm probability fields.
+        """
+        for i in range(1,MAX_COLS):
+            self.t12.append('')
+        for m in re.finditer(r"(\d+/)(\s\d|\d\d)", m.group(1)):
+            self.t12[POSITION_TO_HOUR[m.end()-1]] = m.group(1) + m.group(2).strip()
     
     def _handle_poz(self, m):
         """
@@ -479,7 +522,8 @@ class Mav(object):
         lines = []
         if self.station_id:
             lines.append("station: %s" % self.station_id)
-
+        if self.time:
+            lines.append("timestamp: %s" % self.time)
         ndays = len(self.dt)
         nhours = len(self.hr)
         h = 0
@@ -496,66 +540,38 @@ class Mav(object):
     
     def attach_string_fields(self, lines, h):
         if len(self.nx) and self.nx[h] != '':
-            lines.append("\t\tnighttime minimum/daytime maximum surface temperature: %s" % self.nx[h])
-        lines.append("\t\tsurface temperature: %s" % self.tmp[h])
-        lines.append("\t\tsurface dew point: %s" % self.dpt[h])
+            lines.append("\t\tnighttime minimum/daytime maximum surface temperature: %s F" % self.nx[h])
+        lines.append("\t\tsurface temperature: %s F" % self.tmp[h])
+        lines.append("\t\tsurface dew point: %s F" % self.dpt[h])
         lines.append("\t\tsky cover: %s" % SKY_COVER[self.cld[h]])               
-        lines.append("\t\twind direction: %s" % self.wdr[h])
-        lines.append("\t\twind speed: %s" % self.wsp[h])
+        lines.append("\t\twind direction: %s degrees" % self.wdr[h])
+        lines.append("\t\twind speed: %s knots" % self.wsp[h])
         if len(self.p06) and self.p06[h] != '':
-            lines.append("\t\t6 hour PoP: %s" % self.p06[h])
+            lines.append("\t\t6 hour PoP: %s%%" % self.p06[h])
         if len(self.p12) and self.p12[h] != '':
-            lines.append("\t\t12 hour PoP: %s" % self.p12[h])
+            lines.append("\t\t12 hour PoP: %s%%" % self.p12[h])
         if len(self.q06) and self.q06[h] != '':
             lines.append("\t\t6 hour QPF: %s" % QPF[self.q06[h]])
         if len(self.q12) and self.q12[h] != '':
             lines.append("\t\t12 hour QPF: %s" % QPF[self.q12[h]])
+        if len(self.t06) and self.t06[h] != '':
+            p = self.t06[h].split('/')
+            lines.append("\t\t6 hour probability of thunderstorms: %s%%" % p[0])
+            lines.append("\t\t6 hour probability of severe thunderstorms: %s%%" % p[1])
+        if len(self.t12) and self.t12[h] != '':
+            p = self.t12[h].split('/')
+            lines.append("\t\t12 hour probability of thunderstorms: %s%%" % p[0])
+            lines.append("\t\t12 hour probability of severe thunderstorms: %s%%" % p[1])
         if len(self.poz) and self.poz[h] != '':
-            lines.append("\t\tconditional probability of freezing pcp: %s" % self.poz[h])
+            lines.append("\t\tconditional probability of freezing pcp: %s%%" % self.poz[h])
         if len(self.pos) and self.pos[h] != '':
-            lines.append("\t\tconditional probability of snow: %s" % self.pos[h])
+            lines.append("\t\tconditional probability of snow: %s%%" % self.pos[h])
         lines.append("\t\tprecipitation type: %s" % PRECIPITATION_TYPE[self.typ[h]])
         if len(self.snw) and self.snw[h] != '':
             lines.append("\t\tsnowfall: %s" % SNOWFALL_AMOUNT[self.snw[h]])
         lines.append("\t\tceiling height: %s" % CEILING_HEIGHT[self.cig[h]])
         lines.append("\t\tvisibility: %s" % VISIBILITY[self.vis[h]])
         lines.append("\t\tobstruction to vision: %s" % OBSTRUCTION_TO_VISION[self.obv[h]])
-
-    #def json(self):
-    #    """
-    #    Return a JSON version of the decoded message.
-    #    """
-    #    lines = []
-    #    if self.station_id:
-    #        lines.append("station: %s" % self.station_id)
-
-    #    ndays = len(self.dt)
-    #    nhours = len(self.hr)
-    #    h = 0
-    #    for d in range(ndays):
-    #        lines.append("date: %s" % self.dt[d])
-    #        while 1:
-    #            lines.append("hour: %s" % self.hr[h])
-    #            self.attach_json_fields(lines, h)
-    #            h += 1
-    #            if h == nhours or self.hr[h] == '00':
-    #                break
-
-    #    return json.dumps({'mav' : lines}, sort_keys=True, indent=4, separators=(',', ': '))
-        #return json.dumps({'mav': lines})
-          
-    #def attach_json_fields(self, lines, h):
-    #    if self.nx[h] != '  ':
-    #        lines.append("nighttime minimum/daytime maximum surface temperature: %s" % self.nx[h])
-    #    lines.append("surface temperature: %s" % self.tmp[h])
-    #    lines.append("surface dew point: %s" % self.dpt[h])
-    #    lines.append("sky cover: %s" % SKY_COVER[self.cld[h]])               
-    #    lines.append("wind direction: %s" % self.wdr[h])
-    #    lines.append("wind speed: %s" % self.wsp[h])
-    #    lines.append("precipitation type: %s" % PRECIPITATION_TYPE[self.typ[h]])
-    #    lines.append("ceiling height: %s" % CEILING_HEIGHT[self.cig[h]])
-    #    lines.append("visibility: %s" % VISIBILITY[self.vis[h]])
-    #    lines.append("obstruction to vision: %s" % OBSTRUCTION_TO_VISION[self.obv[h]])
 
     @staticmethod
     def createEmptyPeriodArray():
@@ -594,7 +610,7 @@ class Mav(object):
                   'low' : 'None',
                   'periods' : periodArray}
 
-        #populate report with weather data
+        # populate report with weather data
 
         # time
         if self.time:
@@ -631,12 +647,12 @@ class Mav(object):
             # cover
             if len(self.cld) > i and self.cld[i] != '':
                 report['periods'][i]['cover'] = SKY_COVER[self.cld[i]]
-            # wind
+            # wind direction 
             if len(self.wdr) > i and self.wdr[i] != '':
                 report['periods'][i]['wind']['direction'] = self.wdr[i]
+            # wind speed
             if len(self.wsp) > i and self.wsp[i] != '':
                 report['periods'][i]['wind']['speed'] = self.wsp[i]
-                #report['periods'][i]['wind']['gust']
             # pop6
             if len(self.p06) > i and self.p06[i] != '':
                 report['periods'][i]['pop6'] = self.p06[i]            
@@ -647,9 +663,11 @@ class Mav(object):
             if len(self.q12) > i and self.q12[i] != '':
                 report['periods'][i]['qpf12'] = QPF[self.q12[i]]
             # thund6
-            
+            if len(self.t06) > i and self.t06[i] != '':
+                report['periods'][i]['thund6'] = self.t06[i]            
             # thund12
-
+            if len(self.t12) > i and self.t12[i] != '':
+                report['periods'][i]['thund12'] = self.t12[i]            
             # popz
             if len(self.poz) > i and self.poz[i] != '':
                 report['periods'][i]['popz'] = self.poz[i]   
@@ -672,6 +690,5 @@ class Mav(object):
             if len(self.cig) > i and self.cig[i] != '':
                 report['periods'][i]['ceiling'] = CEILING_HEIGHT[self.cig[i]]
             
-         
         #pprint.pprint(report)
         return json.dumps({'mav': report}) 
