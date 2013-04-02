@@ -19,8 +19,9 @@ logging.basicConfig(level=logging.DEBUG)
 ###############################################################################
 # Cache global database config
 ###############################################################################
-CACHE_ENABLED = True    # Enable CACHE 
-CACHE_TTL = 5           # Set cache expiration time (in minutes) 
+CACHE_ENABLED = True        # Enable CACHE 
+CACHE_TTL = 5               # Set cache expiration time (in minutes) 
+CACHE_LIFETIME = (1 * 360)  # Lifetime of cache entries (in days)
 
 if os.path.exists('/var/www/aerowx/server/wsgi/cache.db'):
     # we need to use an absolute path for running in apache
@@ -81,6 +82,12 @@ def CacheInsertion(client_req, json_data):
         timestamp = datetime.datetime.now().strftime("%s")
         i = cache.insert()
         i.execute(source=client_req[0]['source'].lower(), location=client_req[0]['location'].lower(), datetime=timestamp, json=json_data)
+
+def CachePurge(cache_lifetime = CACHE_LIFETIME):
+    if CACHE_ENABLED:
+        kill_time = (datetime.datetime.now() - datetime.datetime.timedelta(days=cache_lifetime)).strftime("%s")
+        d = cache.delete(cache.c.datetime < kill_time)
+        d.execute()
 
 ###############################################################################
 # Validate all required fields of a client request, make sure we have a valid req
