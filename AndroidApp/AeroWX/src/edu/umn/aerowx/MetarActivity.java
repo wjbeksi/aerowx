@@ -23,10 +23,8 @@ import android.widget.TextView;
 public class MetarActivity extends Activity
 {
 
-	// TODO: Temporary settings
-	String baseUrl = "http://aerowx.dccmn.com/get_weather";
-	String wxid = "kros";
-
+	SettingsData settings;
+	
 	/**
 	 * 
 	 */
@@ -34,12 +32,15 @@ public class MetarActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		
+		settings=new SettingsData(this);
+		
 		setContentView(R.layout.activity_main);
 
 		METARData metar = null;
 		try
 		{
-			metar = requestMETAR(baseUrl);
+			metar = requestMETAR(settings.baseUrl);
 		} catch (Exception e)
 		{
 			Log.i(MetarActivity.class.toString(), e.getMessage());
@@ -89,7 +90,7 @@ public class MetarActivity extends Activity
 		Log.i(MetarActivity.class.toString(), "requestMETAR(" + baseUrl + ")");
 
 		JSONObject requestObject = new JSONObject();
-		requestObject.put("location", wxid);
+		requestObject.put("location", settings.wxid);
 		requestObject.put("time", "");
 		requestObject.put("source", "metar");
 
