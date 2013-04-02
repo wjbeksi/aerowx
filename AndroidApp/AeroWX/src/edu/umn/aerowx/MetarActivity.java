@@ -8,9 +8,11 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 /**
@@ -70,6 +72,18 @@ public class MetarActivity extends Activity
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.action_settings:
+	            doSettings();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
 	/**
 	 * request METAR data from server.
 	 * 
@@ -150,7 +164,7 @@ public class MetarActivity extends Activity
 					{
 						// if this button is clicked, close
 						// current activity
-						MetarActivity.this.finish();
+//						MetarActivity.this.finish();
 					}
 				});
 
@@ -158,4 +172,12 @@ public class MetarActivity extends Activity
 		dialog.show();
 
 	}
+	
+	private void doSettings()
+	{
+		Intent intent = new Intent(this, SettingsActivity.class);
+	    int requestCode = 0;
+		startActivityForResult(intent, requestCode);
+	}
+
 }

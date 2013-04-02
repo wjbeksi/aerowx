@@ -7,5 +7,9 @@
     <string name="Station">Station</string>
     <string name="Time">Time</string>
     <string name="Temp">Temp</string>
-    
+
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="URL">Server URL</string>
+	<string name="Save">Save</string>
+
 </resources>
