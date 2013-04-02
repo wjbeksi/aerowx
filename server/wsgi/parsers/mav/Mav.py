@@ -598,41 +598,38 @@ class Mav(object):
         lines.append("\t\tobstruction to vision: %s" % OBSTRUCTION_TO_VISION[self.obv[h]])
 
     @staticmethod
-    def createEmptyPeriodArray():
-        periods = [None] * (MAX_COLS - 1)
-        for i in range(MAX_COLS - 1):
-            periods[i] = {'date' : 'None',
-                          'hour' : 'None',
-                          'temp' : 'None',
-                          'dewpoint' : 'None',
-                          'cover' : 'None',
-                          'wind' : {'direction' : 'None',
-                                     'speed' : 'None',
-                                     'gust' : 'None'},
-                          'pop6' : 'None',
-                          'pop12' : 'None',
-                          'qpf12' : 'None',
-                          'thund6' : 'None',
-                          'thund12' : 'None',
-                          'popz' : 'None',
-                          'pops' : 'None',
-                          'type' : 'None',
-                          'snow' : 'None',
-                          'visibility' : 'None',
-                          'obscurity' : 'None',
-                          'ceiling' : 'None'}
-        return periods
+    def createEmptyPeriod():
+        period = {'date' : 'None',
+                  'hour' : 'None',
+                  'temp' : 'None',
+                  'dewpoint' : 'None',
+                  'cover' : 'None',
+                  'wind' : {'direction' : 'None',
+                             'speed' : 'None',
+                             'gust' : 'None'},
+                  'pop6' : 'None',
+                  'pop12' : 'None',
+                  'qpf12' : 'None',
+                  'thund6' : 'None',
+                  'thund12' : 'None',
+                  'popz' : 'None',
+                  'pops' : 'None',
+                  'type' : 'None',
+                  'snow' : 'None',
+                  'visibility' : 'None',
+                  'obscurity' : 'None',
+                  'ceiling' : 'None'}
+        return period
 
     def json(self):
         """
         Return a JSON version of the decoded message.
         """
-        periodArray = Mav.createEmptyPeriodArray()
         report = {'wxid' : self.station_id,
                   'time' : 'None',
                   'high' : 'None',
                   'low' : 'None',
-                  'periods' : periodArray}
+                  'periods' : []}
 
         # populate report with weather data
 
@@ -650,69 +647,78 @@ class Mav(object):
         prev_hr = 0
 
         for i in range(MAX_COLS - 1):
-            # hour
+            # Make sure there is an hour entry for this index
             if len(self.hr) > i and self.hr[i] != '':
-                report['periods'][i]['hour'] = self.hr[i]
+                
                 # check if we need to increment the date index
                 if i > 0 and int(prev_hr) > int(self.hr[i]): 
                     date_index += 1 # inc the date index
                 # save prev_hr for next comparison
                 prev_hr = self.hr[i]
 
-            # date
-            if len(self.dt) > date_index:
-                report['periods'][i]['date'] = self.dt[date_index]
-            # temp
-            if len(self.tmp) > i and self.tmp[i] != '':
-                report['periods'][i]['temp'] = self.tmp[i]
-            # dewpoint
-            if len(self.dpt) > i and self.dpt[i] != '':
-                report['periods'][i]['dewpoint'] = self.dpt[i]
-            # cover
-            if len(self.cld) > i and self.cld[i] != '':
-                report['periods'][i]['cover'] = SKY_COVER[self.cld[i]]
-            # wind direction 
-            if len(self.wdr) > i and self.wdr[i] != '':
-                report['periods'][i]['wind']['direction'] = self.wdr[i]
-            # wind speed
-            if len(self.wsp) > i and self.wsp[i] != '':
-                report['periods'][i]['wind']['speed'] = self.wsp[i]
-            # pop6
-            if len(self.p06) > i and self.p06[i] != '':
-                report['periods'][i]['pop6'] = self.p06[i]            
-            # pop12 
-            if len(self.p12) > i and self.p12[i] != '':
-                report['periods'][i]['pop12'] = self.p12[i]   
-            # qpf12
-            if len(self.q12) > i and self.q12[i] != '':
-                report['periods'][i]['qpf12'] = QPF[self.q12[i]]
-            # thund6
-            if len(self.t06) > i and self.t06[i] != '':
-                report['periods'][i]['thund6'] = self.t06[i]            
-            # thund12
-            if len(self.t12) > i and self.t12[i] != '':
-                report['periods'][i]['thund12'] = self.t12[i]            
-            # popz
-            if len(self.poz) > i and self.poz[i] != '':
-                report['periods'][i]['popz'] = self.poz[i]   
-            # pops
-            if len(self.pos) > i and self.pos[i] != '':
-                report['periods'][i]['pops'] = self.pos[i]   
-            # type
-            if len(self.typ) > i and self.typ[i] != '':
-                report['periods'][i]['type'] = PRECIPITATION_TYPE[self.typ[i]]
-            # snow
-            if len(self.snw) > i and self.snw[i] != '':
-                report['periods'][i]['snow'] = SNOWFALL_AMOUNT[self.snw[i]]
-            # visibility
-            if len(self.vis) > i and self.vis[i] != '':
-                report['periods'][i]['visibility'] = VISIBILITY[self.vis[i]] 
-            # obscurity
-            if len(self.obv) > i and self.obv[i] != '':
-                report['periods'][i]['obscurity'] = OBSTRUCTION_TO_VISION[self.obv[i]]   
-            # ceiling
-            if len(self.cig) > i and self.cig[i] != '':
-                report['periods'][i]['ceiling'] = CEILING_HEIGHT[self.cig[i]]
-            
+                # Make sure this hour entry has a corresponding Date
+                # if not skip populating this period
+                if len(self.dt) > date_index:
+                    # create a new period and populate
+                    period = Mav.createEmptyPeriod()
+                    # date
+                    period['date'] = self.dt[date_index]
+                    # hour
+                    period['hour'] = self.hr[i]
+                    # temp
+                    if len(self.tmp) > i and self.tmp[i] != '':
+                        period['temp'] = self.tmp[i]
+                    # dewpoint
+                    if len(self.dpt) > i and self.dpt[i] != '':
+                        period['dewpoint'] = self.dpt[i]
+                    # cover
+                    if len(self.cld) > i and self.cld[i] != '':
+                        period['cover'] = SKY_COVER[self.cld[i]]
+                    # wind direction 
+                    if len(self.wdr) > i and self.wdr[i] != '':
+                        period['wind']['direction'] = self.wdr[i]
+                    # wind speed
+                    if len(self.wsp) > i and self.wsp[i] != '':
+                        period['wind']['speed'] = self.wsp[i]
+                    # pop6
+                    if len(self.p06) > i and self.p06[i] != '':
+                        period['pop6'] = self.p06[i]            
+                    # pop12 
+                    if len(self.p12) > i and self.p12[i] != '':
+                        period['pop12'] = self.p12[i]   
+                    # qpf12
+                    if len(self.q12) > i and self.q12[i] != '':
+                        period['qpf12'] = QPF[self.q12[i]]
+                    # thund6
+                    if len(self.t06) > i and self.t06[i] != '':
+                        period['thund6'] = self.t06[i]            
+                    # thund12
+                    if len(self.t12) > i and self.t12[i] != '':
+                        period['thund12'] = self.t12[i]            
+                    # popz
+                    if len(self.poz) > i and self.poz[i] != '':
+                        period['popz'] = self.poz[i]   
+                    # pops
+                    if len(self.pos) > i and self.pos[i] != '':
+                        period['pops'] = self.pos[i]   
+                    # type
+                    if len(self.typ) > i and self.typ[i] != '':
+                        period['type'] = PRECIPITATION_TYPE[self.typ[i]]
+                    # snow
+                    if len(self.snw) > i and self.snw[i] != '':
+                        period['snow'] = SNOWFALL_AMOUNT[self.snw[i]]
+                    # visibility
+                    if len(self.vis) > i and self.vis[i] != '':
+                        period['visibility'] = VISIBILITY[self.vis[i]] 
+                    # obscurity
+                    if len(self.obv) > i and self.obv[i] != '':
+                        period['obscurity'] = OBSTRUCTION_TO_VISION[self.obv[i]]   
+                    # ceiling
+                    if len(self.cig) > i and self.cig[i] != '':
+                        period['ceiling'] = CEILING_HEIGHT[self.cig[i]]
+
+                    # Push this period onto the array
+                    report['periods'].append(period)
+                    
         #pprint.pprint(report)
         return json.dumps({'mav': report}) 
