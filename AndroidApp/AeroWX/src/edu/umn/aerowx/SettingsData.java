@@ -32,4 +32,15 @@ public class SettingsData
 		editor.commit();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		return "SettingsData ["
+				+ (baseUrl != null ? "baseUrl=" + baseUrl + ", " : "")
+				+ (wxid != null ? "wxid=" + wxid : "") + "]";
+	}
+
 }
