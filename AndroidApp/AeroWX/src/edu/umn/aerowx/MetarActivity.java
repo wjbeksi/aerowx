@@ -26,7 +26,7 @@ public class MetarActivity extends Activity
 {
 
 	SettingsData settings;
-	
+
 	/**
 	 * 
 	 */
@@ -34,9 +34,9 @@ public class MetarActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
-		settings=new SettingsData(this);
-		
+
+		settings = new SettingsData(this);
+
 		setContentView(R.layout.activity_main);
 
 		METARData metar = null;
@@ -73,17 +73,19 @@ public class MetarActivity extends Activity
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-	        case R.id.action_settings:
-	            doSettings();
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		// Handle item selection
+		switch (item.getItemId())
+		{
+		case R.id.action_settings:
+			doSettings();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
-	
+
 	/**
 	 * request METAR data from server.
 	 * 
@@ -164,7 +166,7 @@ public class MetarActivity extends Activity
 					{
 						// if this button is clicked, close
 						// current activity
-//						MetarActivity.this.finish();
+						// MetarActivity.this.finish();
 					}
 				});
 
@@ -172,12 +174,27 @@ public class MetarActivity extends Activity
 		dialog.show();
 
 	}
-	
+
 	private void doSettings()
 	{
 		Intent intent = new Intent(this, SettingsActivity.class);
-	    int requestCode = 0;
+		int requestCode = 0;
 		startActivityForResult(intent, requestCode);
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onActivityResult(int, int,
+	 * android.content.Intent)
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+		Intent intent = new Intent(this, MetarActivity.class);
+		startActivity(intent);
 	}
 
 }
