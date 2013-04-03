@@ -16,8 +16,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:text="@string/AeroWX"
-        android:textColor="#00f0ff"
-        android:textSize="20sp" />
+        android:textColor="#0000ff"
+        android:textSize="17sp" />
 
     <TextView
         android:id="@+id/stationLabel"
@@ -46,10 +46,10 @@
     </TextView>
 
     <TableLayout
+        android:id="@+id/table"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/stationLabel"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/stationLabel" >
 
@@ -238,7 +238,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="none"
                 android:textSize="12sp" />
-            </TableRow>
+        </TableRow>
 
         <TableRow
             android:id="@+id/windRow"
@@ -276,7 +276,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="none"
                 android:textSize="12sp" />
-            </TableRow>
+        </TableRow>
 
         <TableRow
             android:id="@+id/precipRow"
@@ -290,11 +290,6 @@
                 android:ems="10"
                 android:inputType="none"
                 android:text="@string/Precip" />
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="50dp"
@@ -313,7 +308,13 @@
                 android:layout_height="wrap_content"
                 android:inputType="none"
                 android:textSize="12sp" />
-            </TableRow>
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textSize="12sp" />
+        </TableRow>
 
         <TableRow
             android:id="@+id/thundRow"
@@ -327,11 +328,6 @@
                 android:ems="10"
                 android:inputType="none"
                 android:text="@string/Thund" />
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="50dp"
@@ -350,7 +346,13 @@
                 android:layout_height="wrap_content"
                 android:inputType="none"
                 android:textSize="12sp" />
-            </TableRow>
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textSize="12sp" />
+        </TableRow>
 
         <TableRow
             android:id="@+id/visRow"
@@ -364,11 +366,6 @@
                 android:ems="10"
                 android:inputType="none"
                 android:text="@string/Visi" />
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="50dp"
@@ -387,7 +384,13 @@
                 android:layout_height="wrap_content"
                 android:inputType="none"
                 android:textSize="12sp" />
-            </TableRow>
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textSize="12sp" />
+        </TableRow>
 
         <TableRow
             android:id="@+id/ceilRow"
@@ -401,11 +404,6 @@
                 android:ems="10"
                 android:inputType="none"
                 android:text="@string/Ceil" />
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="50dp"
@@ -424,8 +422,21 @@
                 android:layout_height="wrap_content"
                 android:inputType="none"
                 android:textSize="12sp" />
-            </TableRow>
 
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textSize="12sp" />
+        </TableRow>
     </TableLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/table"
+        android:layout_alignParentBottom="true"
+        android:onClick="doCurrent"
+        android:text="@string/currentButton" />
 
 </RelativeLayout>

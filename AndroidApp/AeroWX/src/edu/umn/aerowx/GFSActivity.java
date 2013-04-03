@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TableRow;
 import android.widget.TextView;
 import edu.umn.aerowx.GFSMOSMAVData.Period;
@@ -20,31 +21,31 @@ import edu.umn.aerowx.GFSMOSMAVData.Period;
 public class GFSActivity extends Activity
 {
 
-	// TODO: Temporary settings
-	String baseUrl = "http://aerowx.dccmn.com/get_weather";
-	String wxid = "kros";
-
+	SettingsData settings;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+
+		settings = new SettingsData(this);
+
 		setContentView(R.layout.activity_gfs);
-		
+
 		GFSMOSMAVData gfs = null;
 		try
 		{
-			gfs = requestGFS(baseUrl);
+			gfs = requestGFS(settings.baseUrl);
 		} catch (Exception e)
 		{
 			Log.i(MetarActivity.class.toString(), e.getMessage());
 			errorDialog(e.getMessage());
 			return;
 		}
-		
+
 		((TextView) findViewById(R.id.station)).setText(gfs.wxid);
-		
-		for (int i=0; i<4; ++i)
+
+		for (int i = 0; i < 4; ++i)
 		{
 			displayPeriod(i, gfs.periods[i]);
 		}
@@ -52,35 +53,45 @@ public class GFSActivity extends Activity
 
 	private void displayPeriod(int periodIndex, Period period)
 	{
-		TableRow dateRow=(TableRow) findViewById(R.id.periodDate);
-		((TextView) dateRow.getVirtualChildAt(periodIndex+1)).setText(period.date);
+		TableRow dateRow = (TableRow) findViewById(R.id.periodDate);
+		((TextView) dateRow.getVirtualChildAt(periodIndex + 1))
+				.setText(period.date);
 
-		TableRow timeRow=(TableRow) findViewById(R.id.periodTime);
-		((TextView) timeRow.getVirtualChildAt(periodIndex+1)).setText(period.hour+":00");
+		TableRow timeRow = (TableRow) findViewById(R.id.periodTime);
+		((TextView) timeRow.getVirtualChildAt(periodIndex + 1))
+				.setText(period.hour + ":00");
 
-		TableRow tempRow=(TableRow) findViewById(R.id.tempRow);
-		((TextView) tempRow.getVirtualChildAt(periodIndex+1)).setText(period.temp);
+		TableRow tempRow = (TableRow) findViewById(R.id.tempRow);
+		((TextView) tempRow.getVirtualChildAt(periodIndex + 1))
+				.setText(period.temp);
 
-		TableRow dewptRow=(TableRow) findViewById(R.id.dewptRow);
-		((TextView) dewptRow.getVirtualChildAt(periodIndex+1)).setText(period.dewpoint);
+		TableRow dewptRow = (TableRow) findViewById(R.id.dewptRow);
+		((TextView) dewptRow.getVirtualChildAt(periodIndex + 1))
+				.setText(period.dewpoint);
 
-		TableRow skyRow=(TableRow) findViewById(R.id.skyRow);
-		((TextView) skyRow.getVirtualChildAt(periodIndex+1)).setText(period.cover);
+		TableRow skyRow = (TableRow) findViewById(R.id.skyRow);
+		((TextView) skyRow.getVirtualChildAt(periodIndex + 1))
+				.setText(period.cover);
 
-		TableRow windRow=(TableRow) findViewById(R.id.windRow);
-		((TextView) windRow.getVirtualChildAt(periodIndex+1)).setText(period.wind.direction+"@"+period.wind.speed);
+		TableRow windRow = (TableRow) findViewById(R.id.windRow);
+		((TextView) windRow.getVirtualChildAt(periodIndex + 1))
+				.setText(period.wind.direction + "@" + period.wind.speed);
 
-		TableRow precipRow=(TableRow) findViewById(R.id.precipRow);
-		((TextView) precipRow.getVirtualChildAt(periodIndex+1)).setText(period.pop6);
+		TableRow precipRow = (TableRow) findViewById(R.id.precipRow);
+		((TextView) precipRow.getVirtualChildAt(periodIndex + 1))
+				.setText(period.pop6);
 
-		TableRow thundRow=(TableRow) findViewById(R.id.thundRow);
-		((TextView) thundRow.getVirtualChildAt(periodIndex+1)).setText(period.thund6);
+		TableRow thundRow = (TableRow) findViewById(R.id.thundRow);
+		((TextView) thundRow.getVirtualChildAt(periodIndex + 1))
+				.setText(period.thund6);
 
-		TableRow visiRow=(TableRow) findViewById(R.id.visRow);
-		((TextView) visiRow.getVirtualChildAt(periodIndex+1)).setText(period.visibility);
-		
-		TableRow ceilRow=(TableRow) findViewById(R.id.ceilRow);
-		((TextView) ceilRow.getVirtualChildAt(periodIndex+1)).setText(period.ceiling);
+		TableRow visiRow = (TableRow) findViewById(R.id.visRow);
+		((TextView) visiRow.getVirtualChildAt(periodIndex + 1))
+				.setText(period.visibility);
+
+		TableRow ceilRow = (TableRow) findViewById(R.id.ceilRow);
+		((TextView) ceilRow.getVirtualChildAt(periodIndex + 1))
+				.setText(period.ceiling);
 
 	}
 
@@ -93,17 +104,19 @@ public class GFSActivity extends Activity
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-	        case R.id.action_settings:
-	            doSettings();
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		// Handle item selection
+		switch (item.getItemId())
+		{
+		case R.id.action_settings:
+			doSettings();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
-	
+
 	/**
 	 * request METAR data from server.
 	 * 
@@ -124,7 +137,7 @@ public class GFSActivity extends Activity
 		Log.i(MetarActivity.class.toString(), "requestGFS(" + baseUrl + ")");
 
 		JSONObject requestObject = new JSONObject();
-		requestObject.put("location", wxid);
+		requestObject.put("location", settings.wxid);
 		requestObject.put("time", "");
 		requestObject.put("source", "mav");
 
@@ -134,8 +147,8 @@ public class GFSActivity extends Activity
 
 		Object responseObject = Utils.postJSON(baseUrl, requestArray);
 
-//		// At this point, all we know is that we received back a JSONArray or
-//		// JSONObject
+		// // At this point, all we know is that we received back a JSONArray or
+		// // JSONObject
 		JSONObject object = null;
 		if (responseObject instanceof JSONArray)
 		{
@@ -158,10 +171,9 @@ public class GFSActivity extends Activity
 		{
 			throw new Exception("Server returned error: "
 					+ object.getString("error"));
-		}
-		else if (object.has("mav"))
+		} else if (object.has("mav"))
 		{
-			object=(JSONObject) object.get("mav");
+			object = (JSONObject) object.get("mav");
 		}
 
 		gfsData = new GFSMOSMAVData(object);
@@ -197,11 +209,15 @@ public class GFSActivity extends Activity
 
 	}
 
-
 	private void doSettings()
 	{
 		Intent intent = new Intent(this, SettingsActivity.class);
-	    startActivity(intent);
+		startActivity(intent);
 	}
 
+	public void doCurrent(View view)
+	{
+		Intent intent = new Intent(this, MetarActivity.class);
+		startActivity(intent);
+	}
 }

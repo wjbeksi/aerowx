@@ -9,15 +9,15 @@ public class SettingsActivity extends Activity
 {
 
 	SettingsData settings;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
-		
-		settings=new SettingsData(this);
-		
+
+		settings = new SettingsData(this);
+
 		// Create the wxid view
 		TextView stationView = (TextView) findViewById(R.id.stationSetting);
 		stationView.setText(settings.wxid);
@@ -26,18 +26,17 @@ public class SettingsActivity extends Activity
 		TextView urlView = (TextView) findViewById(R.id.baseURLSetting);
 		urlView.setText(settings.baseUrl);
 	}
-	
+
 	public void doSave(View view)
 	{
 		TextView stationView = (TextView) findViewById(R.id.stationSetting);
-		settings.wxid=stationView.getText().toString();
+		settings.wxid = stationView.getText().toString();
 
 		TextView urlView = (TextView) findViewById(R.id.baseURLSetting);
-		settings.baseUrl=urlView.getText().toString();
-		
+		settings.baseUrl = urlView.getText().toString();
+
 		settings.saveSettings();
 		finish();
 	}
-
 
 }

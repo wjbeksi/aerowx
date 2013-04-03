@@ -221,9 +221,11 @@ public class MetarActivity extends Activity
 		Intent intent = new Intent(this, MetarActivity.class);
 		startActivity(intent);
 	}
-	public void doForecast(View view){
+	
+	public void doForecast(View view)
+	{
 		Intent intent = new Intent(this, GFSActivity.class);
-        startActivity(intent);
+		startActivity(intent);
 	}
 
 }

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">AeroWX</string>
+    <string name="app_name">Current Weather</string>
     <string name="action_settings">Settings</string>
     <string name="AeroWX">Aeronautical Weather in the Field</string>
     <string name="Station">Station</string>
     <string name="Time">Time</string>
     <string name="Temp">Temp</string>
-	<string name="Dewpoint">Dewpoint</string>
+    <string name="Dewpoint">Dewpoint</string>
     <string name="Pressure">Pressure</string>
     <string name="Wind">Wind</string>
     <string name="Visibility">Visibility</string>
     <string name="Weather">Weather</string>
     <string name="Sky">Sky</string>
     <string name="Forecast">Forecast</string>
- 
+
     <!-- GFS/MOS/MAV field labels -->
     <string name="title_activity_gfs">Forecast</string>
     <string name="High">High</string>
@@ -26,7 +26,9 @@
     <string name="Ceil">Ceil</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="URL">Server URL</string>
-	<string name="Save">Save</string>
-	<string name="switchBut">Weather Forecast</string>
+    <string name="Save">Save</string>
+    <string name="switchBut">Weather Forecast</string>
+    <string name="currentButton">Current Weather</string>
+    <string name="CurrentWeather">Current Weather</string>
 
 </resources>
