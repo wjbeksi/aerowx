@@ -39,10 +39,10 @@ public class Utils
 	 * Android 3.0 and above require that network threads be run off the UI
 	 * thread. This class defines a task that will do the network I/O safely.
 	 */
-	static class RequestTask extends AsyncTask<Object, Void, HttpResponse>
+	static class RequestTask extends AsyncTask<Object, Void, String>
 	{
 		@Override
-		protected HttpResponse doInBackground(Object... params)
+		protected String doInBackground(Object... params)
 		{
 			String baseUrl = (String) params[0];
 			StringEntity entity = (StringEntity) params[1];
@@ -63,7 +63,48 @@ public class Utils
 			{
 				return null;
 			}
-			return response;
+			StatusLine statusLine = response.getStatusLine();
+
+			int statusCode = statusLine.getStatusCode();
+			Log.i(MetarActivity.class.toString(), "statusCode: " + statusCode);
+
+			StringBuilder builder = new StringBuilder();
+			if (statusCode != 200)
+			{
+				// TODO Issue error return
+			} else
+			{
+
+				HttpEntity entity2 = response.getEntity();
+				InputStream content = null;
+				try
+				{
+					content = entity2.getContent();
+				} catch (IllegalStateException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(content));
+				String line;
+				try
+				{
+					while ((line = reader.readLine()) != null)
+					{
+						builder.append(line);
+					}
+				} catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return builder.toString();
 		}
 	}
 
@@ -83,48 +124,23 @@ public class Utils
 			throws Exception
 	{
 
-		Log.i(MetarActivity.class.toString(), "postJSON(" + baseUrl + ", "
+		Log.i(Utils.class.toString(), "postJSON(" + baseUrl + ", "
 				+ requestArray + ")");
 
 		StringEntity entity = new StringEntity(requestArray.toString());
 
-		RequestTask requestTask=new RequestTask();
+		RequestTask requestTask = new RequestTask();
 		requestTask.execute(baseUrl, entity);
-		HttpResponse response = requestTask.get();
+		String response = requestTask.get();
 
-		StatusLine statusLine = response.getStatusLine();
-
-		int statusCode = statusLine.getStatusCode();
-		Log.i(MetarActivity.class.toString(), "statusCode: " + statusCode);
-
-		if (statusCode != 200)
+		Object object = new JSONTokener(response).nextValue();
+		if (!(object instanceof JSONArray) && !(object instanceof JSONObject))
 		{
-			throw new Exception("Server returned error " + statusCode + ": "
-					+ statusLine.getReasonPhrase());
-		} else
-		{
-			StringBuilder builder = new StringBuilder();
-
-			HttpEntity entity2 = response.getEntity();
-			InputStream content = entity2.getContent();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					content));
-			String line;
-			while ((line = reader.readLine()) != null)
-			{
-				builder.append(line);
-			}
-
-			Object object = new JSONTokener(builder.toString()).nextValue();
-			if (!(object instanceof JSONArray)
-					&& !(object instanceof JSONObject))
-			{
-				throw new Exception(
-						"Server returned invalid response containing " + object);
-			}
-
-			Log.i(MetarActivity.class.getName(), "JSON response: " + object);
-			return object;
+			throw new Exception("Server returned invalid response containing "
+					+ object);
 		}
+
+		Log.i(Utils.class.getName(), "JSON response: " + object);
+		return object;
 	}
 }
