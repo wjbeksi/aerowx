@@ -88,6 +88,17 @@
         android:inputType="none" >
     </TextView>
 
+    <TextView
+        android:id="@+id/Fill2Label"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/stationLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none">
+    </TextView>
     
     <TextView
         android:id="@+id/tempLabel"
@@ -95,7 +106,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/timeLabel"
+        android:layout_below="@+id/Fill2Label"
         android:layout_margin="2dp"
         android:ems="10"
         android:inputType="none"
@@ -344,6 +355,13 @@
         android:ems="10"
         android:inputType="none" >
     </TextView>
-    
+
+    <Button
+        android:id="@+id/gotogfs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/skyLabel"
+        android:onClick="doForecast"
+        android:text="@string/switchBut" />
 
 </RelativeLayout>

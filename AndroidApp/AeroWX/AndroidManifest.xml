@@ -33,6 +33,11 @@
             android:name="edu.umn.aerowx.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+        <activity
+            android:name="edu.umn.aerowx.GFSActivity"
+            android:label="@string/title_activity_gfs" >
+        </activity>
+        
     </application>
 
 </manifest>

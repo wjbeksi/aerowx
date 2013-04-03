@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 /**
@@ -219,6 +220,10 @@ public class MetarActivity extends Activity
 		super.onActivityResult(requestCode, resultCode, data);
 		Intent intent = new Intent(this, MetarActivity.class);
 		startActivity(intent);
+	}
+	public void doForecast(View view){
+		Intent intent = new Intent(this, GFSActivity.class);
+        startActivity(intent);
 	}
 
 }
