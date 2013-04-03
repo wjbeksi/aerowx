@@ -17,7 +17,7 @@ public class METARData
 
 	/** Time/Date of observation (in GMT) */
 	public String time;
-
+ 
 	/** Temperature */
 	public String temp;
 

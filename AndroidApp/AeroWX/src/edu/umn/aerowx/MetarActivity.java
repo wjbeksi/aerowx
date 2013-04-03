@@ -61,6 +61,30 @@ public class MetarActivity extends Activity
 		// Create the temp view
 		TextView tempView = (TextView) findViewById(R.id.temp);
 		tempView.setText(metar.temp);
+		
+		// Create the dewpoint view
+		TextView dewpointView = (TextView) findViewById(R.id.dewpoint);
+		dewpointView.setText(metar.dewpoint);
+		 
+		// Create the pressure view
+		TextView pressureView = (TextView) findViewById(R.id.pressure);
+		pressureView.setText(metar.pressure);
+
+		// Create the wind view
+		TextView windView = (TextView) findViewById(R.id.wind);
+		windView.setText(metar.wind);
+		
+		// Create the visibility view
+		TextView visView = (TextView) findViewById(R.id.vis);
+		visView.setText(metar.visibility);
+
+		// Create the weather view
+		TextView wxView = (TextView) findViewById(R.id.wx);
+		wxView.setText(metar.weather);
+
+		// Create the sky view
+		TextView skyView = (TextView) findViewById(R.id.sky);
+		skyView.setText(metar.sky);
 
 	}
 
