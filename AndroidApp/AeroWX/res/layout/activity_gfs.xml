@@ -19,52 +19,51 @@
         android:textColor="#00f0ff"
         android:textSize="20sp" />
 
+    <TextView
+        android:id="@+id/stationLabel"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/gfsTitle"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Station" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/station"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/stationLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/stationLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
 
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/gfsTitle"
+        android:layout_alignLeft="@+id/stationLabel"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/gfsTitle" >
+        android:layout_below="@+id/stationLabel" >
 
-        <TableRow
-            android:id="@+id/stationLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-           <TextView
-		        android:id="@+id/station"
-		        android:layout_width="50dp"
-		        android:layout_height="wrap_content"
-		        android:text="@string/Station" />
-
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:inputType="none"/>
-
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:inputType="none"/>
-
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:inputType="none"/>
-
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:inputType="none"/>
-        </TableRow>
-        
-        
         <TableRow
             android:id="@+id/periodDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
+
+            <!-- Header Row -->
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
 
             <TextView
                 android:layout_width="50dp"
@@ -99,17 +98,32 @@
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="none" />
+                android:inputType="none"
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="none"/>
+                android:inputType="none"
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:inputType="none"/>
+                android:inputType="none"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textSize="12sp" />
         </TableRow>
 
         <TableRow
@@ -196,6 +210,7 @@
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
                 android:ems="10"
                 android:inputType="none"
                 android:text="@string/Sky" />
@@ -233,6 +248,8 @@
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:ems="10"
                 android:inputType="none"
                 android:text="@string/Wind" />
 
@@ -269,6 +286,7 @@
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
                 android:ems="10"
                 android:inputType="none"
                 android:text="@string/Precip" />
@@ -305,6 +323,7 @@
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
                 android:ems="10"
                 android:inputType="none"
                 android:text="@string/Thund" />
@@ -406,6 +425,7 @@
                 android:inputType="none"
                 android:textSize="12sp" />
             </TableRow>
+
     </TableLayout>
 
 </RelativeLayout>
