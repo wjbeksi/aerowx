@@ -38,7 +38,7 @@ public class MetarActivity extends Activity
 
 		settings = new SettingsData(this);
 
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_metar);
 
 		METARData metar = null;
 		try

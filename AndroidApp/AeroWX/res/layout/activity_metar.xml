@@ -1,0 +1,293 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:layout_marginTop="2dp"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MetarActivity" >
+
+    <TextView
+        android:id="@+id/metarTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="@string/AeroWX"
+        android:textColor="#0000ff"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/stationLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/metarTitle"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Station" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/station"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/stationLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/stationLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/timeLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/stationLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Time" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/timeLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/timeLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/Fill2Label"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/timeLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/tempLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/Fill2Label"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Temp" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tempLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/tempLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/dewLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tempLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Dewpoint" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/dewpoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/dewLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/dewLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/pressLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/dewLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Pressure" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/pressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/pressLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/pressLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/windLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/pressLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Wind" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/wind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/windLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/windLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/visLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/windLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Visibility" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/vis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/visLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/visLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/wxLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/visLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Weather" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/wx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/wxLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/wxLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/skyLabel"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/wxLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none"
+        android:text="@string/Sky" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/sky"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/skyLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/skyLabel"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/Fill3Label"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/skyLabel"
+        android:layout_margin="2dp"
+        android:ems="10"
+        android:inputType="none" >
+    </TextView>
+
+    <Button
+        android:id="@+id/gotogfs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/metarTitle"
+        android:layout_alignParentBottom="true"
+        android:onClick="doForecast"
+        android:text="@string/switchBut" />
+
+</RelativeLayout>
