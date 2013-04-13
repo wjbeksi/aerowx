@@ -40,7 +40,7 @@ public class MetarActivity extends Activity
 
 		setContentView(R.layout.activity_metar);
 
-		METARData metar = null;
+		MetarData metar = null;
 		try
 		{
 			metar = requestMETAR(settings.baseUrl);
@@ -124,9 +124,9 @@ public class MetarActivity extends Activity
 	 * @throws IOException
 	 *             on server error
 	 */
-	private METARData requestMETAR(String baseUrl) throws Exception
+	private MetarData requestMETAR(String baseUrl) throws Exception
 	{
-		METARData metarData = null;
+		MetarData metarData = null;
 
 		Log.i(MetarActivity.class.toString(), "requestMETAR(" + baseUrl + ")");
 
@@ -167,7 +167,7 @@ public class MetarActivity extends Activity
 					+ object.getString("error"));
 		}
 
-		metarData = new METARData(object);
+		metarData = new MetarData(object);
 		Log.i(MetarActivity.class.toString(), "response: " + metarData);
 		return metarData;
 	}
@@ -224,7 +224,7 @@ public class MetarActivity extends Activity
 	
 	public void doForecast(View view)
 	{
-		Intent intent = new Intent(this, GFSActivity.class);
+		Intent intent = new Intent(this, MavActivity.class);
 		startActivity(intent);
 	}
 

@@ -34,7 +34,7 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name="edu.umn.aerowx.GFSActivity"
+            android:name="edu.umn.aerowx.MavActivity"
             android:label="@string/title_activity_gfs" >
         </activity>
         

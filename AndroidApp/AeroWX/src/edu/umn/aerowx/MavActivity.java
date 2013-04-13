@@ -16,9 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TableRow;
 import android.widget.TextView;
-import edu.umn.aerowx.GFSMOSMAVData.Period;
+import edu.umn.aerowx.MavData.Period;
 
-public class GFSActivity extends Activity
+public class MavActivity extends Activity
 {
 
 	SettingsData settings;
@@ -32,7 +32,7 @@ public class GFSActivity extends Activity
 
 		setContentView(R.layout.activity_gfs);
 
-		GFSMOSMAVData gfs = null;
+		MavData gfs = null;
 		try
 		{
 			gfs = requestGFS(settings.baseUrl);
@@ -130,9 +130,9 @@ public class GFSActivity extends Activity
 	 * @throws IOException
 	 *             on server error
 	 */
-	private GFSMOSMAVData requestGFS(String baseUrl) throws Exception
+	private MavData requestGFS(String baseUrl) throws Exception
 	{
-		GFSMOSMAVData gfsData = null;
+		MavData gfsData = null;
 
 		Log.i(MetarActivity.class.toString(), "requestGFS(" + baseUrl + ")");
 
@@ -176,7 +176,7 @@ public class GFSActivity extends Activity
 			object = (JSONObject) object.get("mav");
 		}
 
-		gfsData = new GFSMOSMAVData(object);
+		gfsData = new MavData(object);
 		Log.i(MetarActivity.class.toString(), "response: " + gfsData);
 		return gfsData;
 	}
@@ -200,7 +200,7 @@ public class GFSActivity extends Activity
 					{
 						// if this button is clicked, close
 						// current activity
-						GFSActivity.this.finish();
+						MavActivity.this.finish();
 					}
 				});
 

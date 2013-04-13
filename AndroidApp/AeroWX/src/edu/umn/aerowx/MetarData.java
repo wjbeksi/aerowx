@@ -9,7 +9,7 @@ import org.json.JSONObject;
  * @author Wayne Johnson
  * 
  */
-public class METARData
+public class MetarData
 {
 	/* METAR Data */
 	/** Weather Station ID (4 letters) */
@@ -48,7 +48,7 @@ public class METARData
 	/**
 	 * Constructor for empty METARData
 	 */
-	public METARData()
+	public MetarData()
 	{
 		super();
 	}
@@ -62,7 +62,7 @@ public class METARData
 	 * @throws JSONException
 	 *             when JSON data is invalid.
 	 */
-	public METARData(JSONObject object) throws JSONException
+	public MetarData(JSONObject object) throws JSONException
 	{
 		super();
 
@@ -171,7 +171,7 @@ public class METARData
 		{
 			return false;
 		}
-		METARData other = (METARData) obj;
+		MetarData other = (MetarData) obj;
 		if (dewpoint == null)
 		{
 			if (other.dewpoint != null)

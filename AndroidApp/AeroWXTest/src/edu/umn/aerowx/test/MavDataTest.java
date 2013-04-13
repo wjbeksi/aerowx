@@ -4,14 +4,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.test.ActivityInstrumentationTestCase2;
-import edu.umn.aerowx.GFSMOSMAVData;
+import edu.umn.aerowx.MavData;
 import edu.umn.aerowx.MetarActivity;
 
-public class GFSMOSMAVDataTest extends
+public class MavDataTest extends
 		ActivityInstrumentationTestCase2<MetarActivity>
 {
 
-	public GFSMOSMAVDataTest()
+	public MavDataTest()
 	{
 		super(MetarActivity.class);
 	}
@@ -23,7 +23,7 @@ public class GFSMOSMAVDataTest extends
 	 */
 	public void testGFSMOSMAVData1() throws JSONException
 	{
-		GFSMOSMAVData gfsMosMavData = new GFSMOSMAVData();
+		MavData gfsMosMavData = new MavData();
 
 		// first the required fields
 		gfsMosMavData.wxid = "kros";
@@ -63,7 +63,7 @@ public class GFSMOSMAVDataTest extends
 		System.out.println("GfsMosMav JSON: "+jsonGfsMosMavData);
 
 		// And now convert back
-		GFSMOSMAVData newGfsMosMavData = new GFSMOSMAVData(jsonGfsMosMavData);
+		MavData newGfsMosMavData = new MavData(jsonGfsMosMavData);
 		System.out.println("reconstituted GfsMosMavData: "+newGfsMosMavData);
 
 		// check that we got back what we put in

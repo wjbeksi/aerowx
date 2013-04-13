@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.test.ActivityInstrumentationTestCase2;
-import edu.umn.aerowx.METARData;
+import edu.umn.aerowx.MetarData;
 import edu.umn.aerowx.MetarActivity;
 
 public class MetarDataTest extends
@@ -24,7 +24,7 @@ public class MetarDataTest extends
 	 */
 	public void testMETARData1() throws JSONException
 	{
-		METARData metarData = new METARData();
+		MetarData metarData = new MetarData();
 
 		// first the required fields
 		metarData.wxid = "kros";
@@ -46,7 +46,7 @@ public class MetarDataTest extends
 		System.out.println("Metar JSON: " + jsonMetarData);
 
 		// And now convert back
-		METARData newMetarData = new METARData(jsonMetarData);
+		MetarData newMetarData = new MetarData(jsonMetarData);
 		System.out.println("reconstituted MetarData: " + newMetarData);
 
 		// check that we got back what we put in

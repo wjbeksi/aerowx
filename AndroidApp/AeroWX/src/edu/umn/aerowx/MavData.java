@@ -17,7 +17,7 @@ import android.util.Log;
  * @author Wayne Johnson
  * 
  */
-public class GFSMOSMAVData
+public class MavData
 {
 	/* GFSMOSMAV Data */
 	
@@ -39,7 +39,7 @@ public class GFSMOSMAVData
 	/**
 	 * Constructor for empty GFSMOSMAVData
 	 */
-	public GFSMOSMAVData()
+	public MavData()
 	{
 		super();
 		periods=new Period[4];
@@ -52,7 +52,7 @@ public class GFSMOSMAVData
 	 *            JSON object from which to create GFSMOSMAVData object.
 	 * @throws JSONException
 	 */
-	public GFSMOSMAVData(JSONObject object) throws JSONException
+	public MavData(JSONObject object) throws JSONException
 	{
 		super();
 
@@ -137,7 +137,7 @@ public class GFSMOSMAVData
 			Log.d(this.getClass().getName(), "getClass("+getClass()+") != obj.getClass("+obj.getClass()+")");
 			return false;
 		}
-		GFSMOSMAVData other = (GFSMOSMAVData) obj;
+		MavData other = (MavData) obj;
 		if (high == null)
 		{
 			if (other.high != null)
@@ -628,7 +628,7 @@ public class GFSMOSMAVData
 
 		for (int i = 0; i < jsonArray.length(); i++)
 		{
-			periods[i] = new GFSMOSMAVData.Period(
+			periods[i] = new MavData.Period(
 					(JSONObject) (jsonArray.get(i)));
 		}
 		return periods;
