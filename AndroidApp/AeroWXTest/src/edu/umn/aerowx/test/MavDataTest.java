@@ -38,7 +38,7 @@ public class MavDataTest extends
 			gfsMosMavData.periods[i].hour = "7";
 			gfsMosMavData.periods[i].temp = "27";
 			gfsMosMavData.periods[i].dewpoint = "27";
-			gfsMosMavData.periods[i].cover = "";
+			gfsMosMavData.periods[i].cover = MavData.Cover.BROKEN;
 			gfsMosMavData.periods[i].wind.direction = "S";
 			gfsMosMavData.periods[i].wind.speed = "-20";
 			gfsMosMavData.periods[i].pop6 = "";

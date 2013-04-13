@@ -1,10 +1,12 @@
 package edu.umn.aerowx;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -51,6 +53,7 @@ public class MavActivity extends Activity
 		}
 	}
 
+	@SuppressLint("DefaultLocale")
 	private void displayPeriod(int periodIndex, Period period)
 	{
 		TableRow dateRow = (TableRow) findViewById(R.id.periodDate);
@@ -71,7 +74,7 @@ public class MavActivity extends Activity
 
 		TableRow skyRow = (TableRow) findViewById(R.id.skyRow);
 		((TextView) skyRow.getVirtualChildAt(periodIndex + 1))
-				.setText(period.cover.toString().toLowerCase());
+				.setText(period.cover.toString().toLowerCase(Locale.getDefault()));
 
 		TableRow windRow = (TableRow) findViewById(R.id.windRow);
 		((TextView) windRow.getVirtualChildAt(periodIndex + 1))
