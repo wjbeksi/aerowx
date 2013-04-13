@@ -53,6 +53,35 @@ public class MavActivity extends Activity
 		}
 	}
 
+	private String convertCover(MavData.Cover cover)
+	{
+		switch (cover)
+		{
+		case CLEAR: return "clear";
+		case FEW: return "few";
+		case SCATTERED: return "scattered";
+		case BROKEN: return "broken";
+		case OVERCAST: return "overcast";
+		}
+		return "unknown";
+	}
+	
+	private String convertVisibility(MavData.Visibility visibility)
+	{
+		switch (visibility)
+		{
+		case V1: return "<1/2mi";
+		case V2: return "1/2-1mi";
+		case V3: return "1-2mi";
+		case V4: return "2-3mi";
+		case V5: return "3-5mi";
+		case V6: return "6mi";
+		case V7: return ">6mi";
+		}
+		return "unknown";
+	}
+	
+	
 	@SuppressLint("DefaultLocale")
 	private void displayPeriod(int periodIndex, Period period)
 	{
@@ -74,7 +103,7 @@ public class MavActivity extends Activity
 
 		TableRow skyRow = (TableRow) findViewById(R.id.skyRow);
 		((TextView) skyRow.getVirtualChildAt(periodIndex + 1))
-				.setText(period.cover.toString().toLowerCase(Locale.getDefault()));
+				.setText(convertCover(period.cover));
 
 		TableRow windRow = (TableRow) findViewById(R.id.windRow);
 		((TextView) windRow.getVirtualChildAt(periodIndex + 1))
@@ -90,7 +119,7 @@ public class MavActivity extends Activity
 
 		TableRow visiRow = (TableRow) findViewById(R.id.visRow);
 		((TextView) visiRow.getVirtualChildAt(periodIndex + 1))
-				.setText(period.visibility);
+				.setText(convertVisibility(period.visibility));
 
 		TableRow ceilRow = (TableRow) findViewById(R.id.ceilRow);
 		((TextView) ceilRow.getVirtualChildAt(periodIndex + 1))

@@ -51,7 +51,7 @@ public class MavDataTest extends
 			gfsMosMavData.periods[i].pops = "";
 			gfsMosMavData.periods[i].type = "";
 			gfsMosMavData.periods[i].snow = "";
-			gfsMosMavData.periods[i].visibility = "";
+			gfsMosMavData.periods[i].visibility = MavData.Visibility.V3;
 			gfsMosMavData.periods[i].obscurity = "";
 			gfsMosMavData.periods[i].ceiling = "";
 		}

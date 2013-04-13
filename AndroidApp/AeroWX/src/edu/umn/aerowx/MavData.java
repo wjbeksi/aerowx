@@ -194,9 +194,63 @@ public class MavData
 		return true;
 	}
 
+	/**
+	 * Enum for Cover values.
+	 */
 	public enum Cover
 	{
 		CLEAR, FEW, SCATTERED, BROKEN, OVERCAST, UNKNOWN;
+	}
+
+	/**
+	 * The JSON field for cover contains some (IMHO) extraneous text. This
+	 * converts to a more compact form.
+	 * 
+	 * @param cover Verbose string
+	 * @return 
+	 */
+	public Cover convertCover(String cover)
+	{
+		if (cover.contains("clear")) return Cover.CLEAR;
+		if (cover.contains("few")) return Cover.FEW;
+		if (cover.contains("scattered")) return Cover.SCATTERED;
+		if (cover.contains("broken")) return Cover.BROKEN;
+		if (cover.contains("overcast")) return Cover.OVERCAST;
+		return Cover.UNKNOWN;
+	}
+
+	/**
+	 * Enum for Visibility values.
+	 */
+	public enum Visibility
+	{
+		V1,		//"< 1/2 miles" 
+		V2,		//"1/2 - < 1 miles"
+		V3,		//"1 - < 2 miles"
+		V4,		//"2 - < 3 miles"
+		V5,		//"3 - 5 miles"
+		V6,		//"6 miles"
+		V7,		//"> 6 miles"}
+		UNKNOWN
+	}
+	
+	/**
+	 * The JSON field for visibility contains some (IMHO) extraneous text. This
+	 * converts to a more compact form.
+	 * 
+	 * @param cover Verbose string
+	 * @return 
+	 */
+	public Visibility convertVisibility(String cover)
+	{
+		if (cover.contains("< 1/2 miles" )) return Visibility.V1;
+		if (cover.contains("1/2 - < 1 miles")) return Visibility.V2;
+		if (cover.contains("1 - < 2 miles")) return Visibility.V3;
+		if (cover.contains("2 - < 3 miles")) return Visibility.V4;
+		if (cover.contains("3 - 5 miles")) return Visibility.V5;
+		if (cover.contains("6 miles")) return Visibility.V6;
+		if (cover.contains("> 6 miles")) return Visibility.V7;
+		return Visibility.UNKNOWN;
 	}
 	
 	/**
@@ -259,7 +313,7 @@ public class MavData
 		public String snow;
 
 		/** Visibility */
-		public String visibility;
+		public Visibility visibility;
 
 		/** possible reason for obscurity (fog, smoke, etc) */
 		public String obscurity;
@@ -303,28 +357,11 @@ public class MavData
 			pops = object.optString("pops");
 			type = object.optString("type");
 			snow = object.optString("snow");
-			visibility = object.optString("visibility");
+			visibility = convertVisibility(object.optString("visibility"));
 			obscurity = object.optString("obscurity");
 			ceiling = object.optString("ceiling");
 		}
 
-		/**
-		 * The JSON field for cover contains some (IMHO) extraneous text. This
-		 * converts to a more compact form.
-		 * 
-		 * @param cover Verbose string
-		 * @return 
-		 */
-		public Cover convertCover(String cover)
-		{
-			if (cover.contains("clear")) return Cover.CLEAR;
-			if (cover.contains("few")) return Cover.FEW;
-			if (cover.contains("scattered")) return Cover.SCATTERED;
-			if (cover.contains("broken")) return Cover.BROKEN;
-			if (cover.contains("overcast")) return Cover.OVERCAST;
-			return Cover.UNKNOWN;
-		}
-		
 		/**
 		 * Serialize a Period object into JSON
 		 * 
