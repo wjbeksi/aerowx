@@ -71,7 +71,7 @@ public class MavActivity extends Activity
 
 		TableRow skyRow = (TableRow) findViewById(R.id.skyRow);
 		((TextView) skyRow.getVirtualChildAt(periodIndex + 1))
-				.setText(period.cover);
+				.setText(period.cover.toString().toLowerCase());
 
 		TableRow windRow = (TableRow) findViewById(R.id.windRow);
 		((TextView) windRow.getVirtualChildAt(periodIndex + 1))

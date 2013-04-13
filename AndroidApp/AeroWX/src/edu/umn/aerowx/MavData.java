@@ -194,6 +194,11 @@ public class MavData
 		return true;
 	}
 
+	public enum Cover
+	{
+		CLEAR, FEW, SCATTERED, BROKEN, OVERCAST, UNKNOWN;
+	}
+	
 	/**
 	 * Subclass for Period information
 	 */
@@ -212,7 +217,7 @@ public class MavData
 		public String dewpoint;
 
 		/** Cloud cover */
-		public String cover;
+		public Cover cover;
 
 		/** Surface wind */
 		public Wind wind;
@@ -286,7 +291,7 @@ public class MavData
 			hour = object.optString("hour");
 			temp = object.optString("temp");
 			dewpoint = object.optString("dewpoint");
-			cover = object.optString("cover");
+			cover = convertCover(object.optString("cover"));
 			wind = new Wind(object.getJSONObject("wind"));
 			pop6 = object.optString("pop6");
 			pop12 = object.optString("pop12");
@@ -303,6 +308,23 @@ public class MavData
 			ceiling = object.optString("ceiling");
 		}
 
+		/**
+		 * The JSON field for cover contains some (IMHO) extraneous text. This
+		 * converts to a more compact form.
+		 * 
+		 * @param cover Verbose string
+		 * @return 
+		 */
+		public Cover convertCover(String cover)
+		{
+			if (cover.contains("clear")) return Cover.CLEAR;
+			if (cover.contains("few")) return Cover.FEW;
+			if (cover.contains("scattered")) return Cover.SCATTERED;
+			if (cover.contains("broken")) return Cover.BROKEN;
+			if (cover.contains("overcast")) return Cover.OVERCAST;
+			return Cover.UNKNOWN;
+		}
+		
 		/**
 		 * Serialize a Period object into JSON
 		 * 
