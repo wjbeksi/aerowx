@@ -80,51 +80,39 @@ public class MavActivity extends Activity
 		}
 		return "unknown";
 	}
-	
+
+	/**
+	 * Convenience method to set text into the view rows
+	 * @param id	id of row of view
+	 * @param periodIndex period (column) of view
+	 * @param value value to set.
+	 */
+	void setView(int id, int periodIndex, String value)
+	{
+		TableRow row = (TableRow) findViewById(id);
+		if (row != null)
+		{
+			TextView view=(TextView)row.getVirtualChildAt(periodIndex + 1);
+			if (view != null)
+			{
+				view.setText(value);
+			}
+		}
+	}
 	
 	@SuppressLint("DefaultLocale")
 	private void displayPeriod(int periodIndex, Period period)
 	{
-		TableRow dateRow = (TableRow) findViewById(R.id.periodDate);
-		((TextView) dateRow.getVirtualChildAt(periodIndex + 1))
-				.setText(period.date);
-
-		TableRow timeRow = (TableRow) findViewById(R.id.periodTime);
-		((TextView) timeRow.getVirtualChildAt(periodIndex + 1))
-				.setText(period.hour + ":00");
-
-		TableRow tempRow = (TableRow) findViewById(R.id.tempRow);
-		((TextView) tempRow.getVirtualChildAt(periodIndex + 1))
-				.setText(period.temp);
-
-		TableRow dewptRow = (TableRow) findViewById(R.id.dewptRow);
-		((TextView) dewptRow.getVirtualChildAt(periodIndex + 1))
-				.setText(period.dewpoint);
-
-		TableRow skyRow = (TableRow) findViewById(R.id.skyRow);
-		((TextView) skyRow.getVirtualChildAt(periodIndex + 1))
-				.setText(convertCover(period.cover));
-
-		TableRow windRow = (TableRow) findViewById(R.id.windRow);
-		((TextView) windRow.getVirtualChildAt(periodIndex + 1))
-				.setText(period.wind.direction + "@" + period.wind.speed);
-
-		TableRow precipRow = (TableRow) findViewById(R.id.precipRow);
-		((TextView) precipRow.getVirtualChildAt(periodIndex + 1))
-				.setText(period.pop6);
-
-		TableRow thundRow = (TableRow) findViewById(R.id.thundRow);
-		((TextView) thundRow.getVirtualChildAt(periodIndex + 1))
-				.setText(period.thund6);
-
-		TableRow visiRow = (TableRow) findViewById(R.id.visRow);
-		((TextView) visiRow.getVirtualChildAt(periodIndex + 1))
-				.setText(convertVisibility(period.visibility));
-
-		TableRow ceilRow = (TableRow) findViewById(R.id.ceilRow);
-		((TextView) ceilRow.getVirtualChildAt(periodIndex + 1))
-				.setText(period.ceiling);
-
+		setView(R.id.periodDate, periodIndex, period.date);
+		setView(R.id.periodTime, periodIndex, period.hour + ":00");
+		setView(R.id.tempRow, periodIndex, period.temp);
+		setView(R.id.dewptRow, periodIndex, period.dewpoint);
+		setView(R.id.skyRow, periodIndex, convertCover(period.cover));
+		setView(R.id.windRow, periodIndex, period.wind.direction + "@" + period.wind.speed);
+		setView(R.id.precipRow, periodIndex, period.pop6);
+		setView(R.id.thundRow, periodIndex, period.thund6);
+		setView(R.id.visRow, periodIndex, convertVisibility(period.visibility));
+		setView(R.id.ceilRow, periodIndex, period.ceiling);
 	}
 
 	@Override
