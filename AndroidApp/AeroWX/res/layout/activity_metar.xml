@@ -260,13 +260,14 @@
         android:id="@+id/sky"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/skyLabel"
-        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/gotogfs"
+		android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/skyLabel"        
         android:layout_margin="2dp"
-        android:layout_toRightOf="@+id/skyLabel"
         android:ems="10"
         android:inputType="none" >
+
     </TextView>
 
     <TextView
