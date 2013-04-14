@@ -51,6 +51,9 @@ public class MetarData
 	/** various optional remarks */
 	public String remarks;
 
+	@SuppressLint("SimpleDateFormat")
+	private final static SimpleDateFormat sdfMETAR = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy zzz");
+
 	/**
 	 * Constructor for empty METARData
 	 */
@@ -89,11 +92,8 @@ public class MetarData
 		remarks = metarObject.optString("remarks", null);
 	}
 
-	@SuppressLint("SimpleDateFormat")
 	private Date convertTime(String timeString)
 	{
-		SimpleDateFormat sdfMETAR=new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy zzz");
-		
 		Date date = null;
 		try
 		{
