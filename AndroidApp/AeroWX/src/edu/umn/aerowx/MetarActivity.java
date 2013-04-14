@@ -41,7 +41,6 @@ public class MetarActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_metar);
 	}
 
@@ -223,6 +222,10 @@ public class MetarActivity extends Activity
 	{
 		Intent intent = new Intent(this, MavActivity.class);
 		startActivity(intent);
+		// When we start the forecast activity, we don't want the back button to
+		// come here. If the user wants to come back, they have to hit the
+		// current button.  To force this, we close this activity.
+		finish();
 	}
 
 }

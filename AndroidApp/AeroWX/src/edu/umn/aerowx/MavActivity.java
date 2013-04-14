@@ -300,5 +300,9 @@ public class MavActivity extends Activity
 	{
 		Intent intent = new Intent(this, MetarActivity.class);
 		startActivity(intent);
+		// When we start the current activity, we don't want the back button to
+		// come here. If the user wants to come back, they have to hit the
+		// forecast button.  To force this, we close this activity.
+		finish();
 	}
 }
