@@ -37,16 +37,28 @@ public class MavActivity extends Activity
 	private SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm");
 
 	/** 
-	 * Generate view for Mav Activity 
+	 * Called when activity is first created.
+	 *   
+	 * Creates the activity View. 
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
-		settings = new SettingsData(this);
-
 		setContentView(R.layout.activity_gfs);
+	}
+
+	/** 
+	 * Called when activity is started or restarted.
+	 *   
+	 * Calls the server for data and populates the activity View. 
+	 */
+	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		
+		settings = new SettingsData(this);
 
 		MavData gfs = null;
 		try
@@ -268,12 +280,22 @@ public class MavActivity extends Activity
 
 	}
 
+	/**
+	 * Called when the user selects the settings menu option.
+	 * 
+	 * Starts the Settings Activity.
+	 */
 	private void doSettings()
 	{
 		Intent intent = new Intent(this, SettingsActivity.class);
 		startActivity(intent);
 	}
 
+	/**
+	 * Called when the user presses the Current Weather button.
+	 * 
+	 * Starts the Metar Activity.
+	 */
 	public void doCurrent(View view)
 	{
 		Intent intent = new Intent(this, MetarActivity.class);

@@ -42,9 +42,18 @@ public class MetarActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 
-		settings = new SettingsData(this);
-
 		setContentView(R.layout.activity_metar);
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
+	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		
+		settings = new SettingsData(this);
 
 		MetarData metar = null;
 		try
@@ -195,38 +204,20 @@ public class MetarActivity extends Activity
 				{
 					public void onClick(DialogInterface dialog, int id)
 					{
-						// if this button is clicked, close
-						// current activity
-						// MetarActivity.this.finish();
 					}
 				});
 
 		AlertDialog dialog = builder.create();
 		dialog.show();
-
 	}
 
 	private void doSettings()
 	{
 		Intent intent = new Intent(this, SettingsActivity.class);
-		int requestCode = 0;
-		startActivityForResult(intent, requestCode);
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onActivityResult(int, int,
-	 * android.content.Intent)
-	 */
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		super.onActivityResult(requestCode, resultCode, data);
-		Intent intent = new Intent(this, MetarActivity.class);
 		startActivity(intent);
+
 	}
+
 	
 	public void doForecast(View view)
 	{
