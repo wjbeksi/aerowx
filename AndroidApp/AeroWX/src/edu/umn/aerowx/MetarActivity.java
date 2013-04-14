@@ -1,10 +1,12 @@
 package edu.umn.aerowx;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -27,6 +29,10 @@ public class MetarActivity extends Activity
 {
 
 	SettingsData settings;
+
+	@SuppressLint("SimpleDateFormat")
+	/** Format for display date */
+	private SimpleDateFormat sdfTime = new SimpleDateFormat("EEE MMMMM dd HH:mm yyyy");
 
 	/**
 	 * 
@@ -57,7 +63,7 @@ public class MetarActivity extends Activity
 
 		// Create the time view
 		TextView timeView = (TextView) findViewById(R.id.time);
-		timeView.setText(metar.time.toString());
+		timeView.setText(sdfTime.format(metar.time));
 
 		// Create the temp view
 		TextView tempView = (TextView) findViewById(R.id.temp);
