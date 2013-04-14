@@ -1,7 +1,10 @@
 package edu.umn.aerowx;
 
 import java.io.IOException;
-import java.util.Locale;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,6 +27,11 @@ public class MavActivity extends Activity
 {
 
 	SettingsData settings;
+	
+	@SuppressLint("SimpleDateFormat")
+	private SimpleDateFormat sdfDate = new SimpleDateFormat("MMMMM dd");
+	@SuppressLint("SimpleDateFormat")
+	private SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm");
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -99,12 +107,54 @@ public class MavActivity extends Activity
 			}
 		}
 	}
+
+	enum Month
+	{
+		JAN, FEB, MAR, APR, MAY, JUNE, JULY, AUG, SEP, OCT, NOV, DEC;
+	}
 	
-	@SuppressLint("DefaultLocale")
+	@SuppressLint({ "DefaultLocale", "SimpleDateFormat" })
 	private void displayPeriod(int periodIndex, Period period)
 	{
-		setView(R.id.periodDate, periodIndex, period.date);
-		setView(R.id.periodTime, periodIndex, period.hour + ":00");
+		// Convert the Date/Time in the MAV data to local time.
+		// To quote an entry in stackoverflow: 
+		// 		"I pity the fool who has to do dates in Java."
+		
+		// Get the timezone of the MAV data (GMT) and a calendar to match
+		TimeZone tz = TimeZone.getTimeZone("GMT");
+		Calendar periodCalendar=Calendar.getInstance(tz);
+		// Reset minutes since it's always on the hour
+		periodCalendar.set(Calendar.MINUTE, 0);
+
+		// Split up the period.date to month and day and put those and the hour
+		// into our Calendar.
+		String[] split=period.date.split("  *");
+		if (split.length==2)
+		{
+			try
+			{
+				int month=Month.valueOf(split[0]).ordinal();
+				periodCalendar.set(Calendar.MONTH, month);
+				int day=Integer.parseInt(split[1]);
+				periodCalendar.set(Calendar.DAY_OF_MONTH, day);
+				int hour=Integer.parseInt(period.hour);
+				periodCalendar.set(Calendar.HOUR_OF_DAY, hour);
+			}
+			catch (Exception e)
+			{
+				// If the parsing failed, we don't care
+			}
+		}
+		
+		// Now extract the local time as a Date class
+		Date local=periodCalendar.getTime();
+		
+		// Format for display
+		String date=sdfDate.format(local);
+		String time=sdfTime.format(local);
+		setView(R.id.periodDate, periodIndex, date);
+		setView(R.id.periodTime, periodIndex, time);
+		
 		setView(R.id.tempRow, periodIndex, period.temp);
 		setView(R.id.dewptRow, periodIndex, period.dewpoint);
 		setView(R.id.skyRow, periodIndex, convertCover(period.cover));
