@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="edu.umn.aerowx.MetarActivity"
-            android:label="@string/app_name" >
+            android:label="@string/title_activity_metar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
