@@ -1,5 +1,7 @@
 package edu.umn.aerowx.test;
 
+import java.util.Date;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,7 +30,7 @@ public class MetarDataTest extends
 
 		// first the required fields
 		metarData.wxid = "kros";
-		metarData.time = "19:00";
+		metarData.time = new Date();
 		metarData.temp = "27";
 		metarData.dewpoint = "25";
 		metarData.pressure = "27.5";

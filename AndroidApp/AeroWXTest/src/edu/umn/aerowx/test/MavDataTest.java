@@ -1,5 +1,7 @@
 package edu.umn.aerowx.test;
 
+import java.util.Date;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,8 +36,7 @@ public class MavDataTest extends
 		for (int i = 0; i < 4; ++i)
 		{
 			gfsMosMavData.periods[i]=gfsMosMavData.new Period();
-			gfsMosMavData.periods[i].date = "1/1/2013";
-			gfsMosMavData.periods[i].hour = "7";
+			gfsMosMavData.periods[i].time = new Date();
 			gfsMosMavData.periods[i].temp = "27";
 			gfsMosMavData.periods[i].dewpoint = "27";
 			gfsMosMavData.periods[i].cover = MavData.Cover.BROKEN;
