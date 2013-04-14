@@ -57,7 +57,7 @@ public class MetarActivity extends Activity
 
 		// Create the time view
 		TextView timeView = (TextView) findViewById(R.id.time);
-		timeView.setText(metar.time);
+		timeView.setText(metar.time.toString());
 
 		// Create the temp view
 		TextView tempView = (TextView) findViewById(R.id.temp);

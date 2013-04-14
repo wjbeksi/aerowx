@@ -128,7 +128,7 @@ public class MavActivity extends Activity
 
 		// Split up the period.date to month and day and put those and the hour
 		// into our Calendar.
-		String[] split=period.date.split("  *");
+		String[] split=period.date.split(" +");
 		if (split.length==2)
 		{
 			try

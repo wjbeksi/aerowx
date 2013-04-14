@@ -1,7 +1,13 @@
 package edu.umn.aerowx;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.annotation.SuppressLint;
 
 /**
  * This class manages data coming from the METAR weather server.
@@ -16,7 +22,7 @@ public class MetarData
 	public String wxid;
 
 	/** Time/Date of observation (in GMT) */
-	public String time;
+	public Date time;
  
 	/** Temperature */
 	public String temp;
@@ -71,7 +77,7 @@ public class MetarData
 
 		// All these are required in a METAR message
 		wxid = metarObject.optString("station", null);
-		time = metarObject.optString("time", null);
+		time = convertTime(metarObject.optString("time", null));
 		temp = metarObject.optString("temperature", null);
 		dewpoint = metarObject.optString("dew point", null);
 		pressure = metarObject.optString("pressure", null);
@@ -81,6 +87,23 @@ public class MetarData
 		weather = metarObject.optString("weather", null);
 		sky = metarObject.optString("sky", null);
 		remarks = metarObject.optString("remarks", null);
+	}
+
+	@SuppressLint("SimpleDateFormat")
+	private Date convertTime(String timeString)
+	{
+		SimpleDateFormat sdfMETAR=new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy zzz");
+		
+		Date date = null;
+		try
+		{
+			date=sdfMETAR.parse(timeString+" GMT");
+		} catch (ParseException e)
+		{
+			return null;
+		}
+		
+		return date;
 	}
 
 	/**
