@@ -3,12 +3,18 @@
  */
 package edu.umn.aerowx;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 /**
@@ -258,11 +264,8 @@ public class MavData
 	 */
 	public class Period
 	{
-		/** Date of period */
-		public String date;
-
-		/** Beginning hour of period */
-		public String hour;
+		/** Time of period */
+		public Date time;
 
 		/** Temperature */
 		public String temp;
@@ -341,8 +344,9 @@ public class MavData
 		 */
 		public Period(JSONObject object) throws JSONException
 		{
-			date = object.optString("date");
-			hour = object.optString("hour");
+			String date = object.optString("date");
+			String hour = object.optString("hour");
+			time = convertTime(date, hour);
 			temp = object.optString("temp");
 			dewpoint = object.optString("dewpoint");
 			cover = convertCover(object.optString("cover"));
@@ -362,6 +366,24 @@ public class MavData
 			ceiling = object.optString("ceiling");
 		}
 
+		@SuppressLint("SimpleDateFormat")
+		private Date convertTime(String dateString, String hourString)
+		{
+			SimpleDateFormat sdfMETAR=new SimpleDateFormat("MMMMM dd HH:mm yyyy zzz");
+			Calendar currentDate=Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+			
+			Date date = null;
+			try
+			{
+				date=sdfMETAR.parse(dateString+" "+hourString+":00 "+currentDate.get(Calendar.YEAR)+" GMT");
+			} catch (ParseException e)
+			{
+				return null;
+			}
+			
+			return date;
+		}
+
 		/**
 		 * Serialize a Period object into JSON
 		 * 
@@ -374,8 +396,7 @@ public class MavData
 		{
 			JSONObject object = new JSONObject();
 
-			object.put("date", date);
-			object.put("hour", hour);
+			object.put("time", time);
 			object.put("temp", temp);
 			object.put("dewpoint", dewpoint);
 			object.put("cover", cover);
@@ -408,7 +429,7 @@ public class MavData
 		@Override
 		public String toString()
 		{
-			return "Period [date=" + date + ", hour=" + hour + ", temp=" + temp
+			return "Period [time=" + time + ", temp=" + temp
 					+ ", dewpoint=" + dewpoint + ", cover=" + cover + ", wind="
 					+ wind + ", pop6=" + pop6 + ", pop12=" + pop12 + ", qpf6="
 					+ qpf6 + ", qpf12=" + qpf12 + ", thund6=" + thund6
@@ -431,10 +452,9 @@ public class MavData
 			result = prime * result
 					+ ((ceiling == null) ? 0 : ceiling.hashCode());
 			result = prime * result + ((cover == null) ? 0 : cover.hashCode());
-			result = prime * result + ((date == null) ? 0 : date.hashCode());
+			result = prime * result + ((time == null) ? 0 : time.hashCode());
 			result = prime * result
 					+ ((dewpoint == null) ? 0 : dewpoint.hashCode());
-			result = prime * result + ((hour == null) ? 0 : hour.hashCode());
 			result = prime * result
 					+ ((obscurity == null) ? 0 : obscurity.hashCode());
 			result = prime * result + ((pop12 == null) ? 0 : pop12.hashCode());
@@ -497,13 +517,13 @@ public class MavData
 			{
 				return false;
 			}
-			if (date == null)
+			if (time == null)
 			{
-				if (other.date != null)
+				if (other.time != null)
 				{
 					return false;
 				}
-			} else if (!date.equals(other.date))
+			} else if (!time.equals(other.time))
 			{
 				return false;
 			}
@@ -514,16 +534,6 @@ public class MavData
 					return false;
 				}
 			} else if (!dewpoint.equals(other.dewpoint))
-			{
-				return false;
-			}
-			if (hour == null)
-			{
-				if (other.hour != null)
-				{
-					return false;
-				}
-			} else if (!hour.equals(other.hour))
 			{
 				return false;
 			}

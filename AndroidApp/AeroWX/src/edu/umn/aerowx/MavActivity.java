@@ -2,9 +2,6 @@ package edu.umn.aerowx;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,13 +23,22 @@ import edu.umn.aerowx.MavData.Period;
 public class MavActivity extends Activity
 {
 
+	/** 
+	 * Values from settings.
+	 */
 	SettingsData settings;
 	
 	@SuppressLint("SimpleDateFormat")
+	/** Format for display date */
 	private SimpleDateFormat sdfDate = new SimpleDateFormat("MMMMM dd");
+	
 	@SuppressLint("SimpleDateFormat")
+	/** Format for display time */
 	private SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm");
 
+	/** 
+	 * Generate view for Mav Activity 
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -61,6 +67,12 @@ public class MavActivity extends Activity
 		}
 	}
 
+	/**
+	 * Convert Cover enum to display data.
+	 * 
+	 * @param cover Cover enum
+	 * @return String with display data
+	 */
 	private String convertCover(MavData.Cover cover)
 	{
 		switch (cover)
@@ -74,6 +86,12 @@ public class MavActivity extends Activity
 		return "unknown";
 	}
 	
+	/**
+	 * Convert Visibility enum to display data.
+	 * 
+	 * @param visibility Visibility enum
+	 * @return String with display data
+	 */
 	private String convertVisibility(MavData.Visibility visibility)
 	{
 		switch (visibility)
@@ -108,52 +126,17 @@ public class MavActivity extends Activity
 		}
 	}
 
-	enum Month
-	{
-		JAN, FEB, MAR, APR, MAY, JUNE, JULY, AUG, SEP, OCT, NOV, DEC;
-	}
-	
+	/** 
+	 * Copy MavData to the view.
+	 * 
+	 * @param periodIndex Index into Mav Period
+	 * @param period MavData Period data.	
+	 */
 	@SuppressLint({ "DefaultLocale", "SimpleDateFormat" })
 	private void displayPeriod(int periodIndex, Period period)
 	{
-		// Convert the Date/Time in the MAV data to local time.
-		// To quote an entry in stackoverflow: 
-		// 		"I pity the fool who has to do dates in Java."
-		
-		// Get the timezone of the MAV data (GMT) and a calendar to match
-		TimeZone tz = TimeZone.getTimeZone("GMT");
-		Calendar periodCalendar=Calendar.getInstance(tz);
-		// Reset minutes since it's always on the hour
-		periodCalendar.set(Calendar.MINUTE, 0);
-
-		// Split up the period.date to month and day and put those and the hour
-		// into our Calendar.
-		String[] split=period.date.split(" +");
-		if (split.length==2)
-		{
-			try
-			{
-				int month=Month.valueOf(split[0]).ordinal();
-				periodCalendar.set(Calendar.MONTH, month);
-				int day=Integer.parseInt(split[1]);
-				periodCalendar.set(Calendar.DAY_OF_MONTH, day);
-				int hour=Integer.parseInt(period.hour);
-				periodCalendar.set(Calendar.HOUR_OF_DAY, hour);
-			}
-			catch (Exception e)
-			{
-				// If the parsing failed, we don't care
-			}
-		}
-		
-		// Now extract the local time as a Date class
-		Date local=periodCalendar.getTime();
-		
-		// Format for display
-		String date=sdfDate.format(local);
-		String time=sdfTime.format(local);
-		setView(R.id.periodDate, periodIndex, date);
-		setView(R.id.periodTime, periodIndex, time);
+		setView(R.id.periodDate, periodIndex, sdfDate.format(period.time));
+		setView(R.id.periodTime, periodIndex, sdfTime.format(period.time));
 		
 		setView(R.id.tempRow, periodIndex, period.temp);
 		setView(R.id.dewptRow, periodIndex, period.dewpoint);
@@ -165,6 +148,9 @@ public class MavActivity extends Activity
 		setView(R.id.ceilRow, periodIndex, period.ceiling);
 	}
 
+	/**
+	 * Create the menu view
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
@@ -173,6 +159,9 @@ public class MavActivity extends Activity
 		return true;
 	}
 
+	/**
+	 * Called when menu item is selected.
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
