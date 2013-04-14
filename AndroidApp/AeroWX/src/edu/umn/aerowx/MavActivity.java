@@ -77,11 +77,11 @@ public class MavActivity extends Activity
 	{
 		switch (cover)
 		{
-		case CLEAR: return "clear";
-		case FEW: return "few";
-		case SCATTERED: return "scattered";
-		case BROKEN: return "broken";
-		case OVERCAST: return "overcast";
+		case CLEAR: return "Clear";
+		case FEW: return "Few";
+		case SCATTERED: return "Scattered";
+		case BROKEN: return "Broken";
+		case OVERCAST: return "Overcast";
 		}
 		return "unknown";
 	}
