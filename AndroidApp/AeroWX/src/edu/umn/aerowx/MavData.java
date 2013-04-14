@@ -206,23 +206,23 @@ public class MavData
 	public enum Cover
 	{
 		CLEAR, FEW, SCATTERED, BROKEN, OVERCAST, UNKNOWN;
-	}
 
-	/**
-	 * The JSON field for cover contains some (IMHO) extraneous text. This
-	 * converts to a more compact form.
-	 * 
-	 * @param cover Verbose string
-	 * @return 
-	 */
-	public Cover convertCover(String cover)
-	{
-		if (cover.contains("clear")) return Cover.CLEAR;
-		if (cover.contains("few")) return Cover.FEW;
-		if (cover.contains("scattered")) return Cover.SCATTERED;
-		if (cover.contains("broken")) return Cover.BROKEN;
-		if (cover.contains("overcast")) return Cover.OVERCAST;
-		return Cover.UNKNOWN;
+		/**
+		 * The JSON field for cover contains some (IMHO) extraneous text. This
+		 * converts to a more compact form.
+		 * 
+		 * @param cover Verbose string
+		 * @return 
+		 */
+		public static Cover convert(String cover)
+		{
+			if (cover.contains("clear")) return Cover.CLEAR;
+			if (cover.contains("few")) return Cover.FEW;
+			if (cover.contains("scattered")) return Cover.SCATTERED;
+			if (cover.contains("broken")) return Cover.BROKEN;
+			if (cover.contains("overcast")) return Cover.OVERCAST;
+			return Cover.UNKNOWN;
+		}
 	}
 
 	/**
@@ -237,27 +237,28 @@ public class MavData
 		V5,		//"3 - 5 miles"
 		V6,		//"6 miles"
 		V7,		//"> 6 miles"}
-		UNKNOWN
+		UNKNOWN;
+
+		/**
+		 * The JSON field for visibility contains some (IMHO) extraneous text. This
+		 * converts to a more compact form.
+		 * 
+		 * @param cover Verbose string
+		 * @return 
+		 */
+		public static Visibility convert(String cover)
+		{
+			if (cover.contains("< 1/2 miles" )) return Visibility.V1;
+			if (cover.contains("1/2 - < 1 miles")) return Visibility.V2;
+			if (cover.contains("1 - < 2 miles")) return Visibility.V3;
+			if (cover.contains("2 - < 3 miles")) return Visibility.V4;
+			if (cover.contains("3 - 5 miles")) return Visibility.V5;
+			if (cover.contains("6 miles")) return Visibility.V6;
+			if (cover.contains("> 6 miles")) return Visibility.V7;
+			return Visibility.UNKNOWN;
+		}
 	}
 	
-	/**
-	 * The JSON field for visibility contains some (IMHO) extraneous text. This
-	 * converts to a more compact form.
-	 * 
-	 * @param cover Verbose string
-	 * @return 
-	 */
-	public Visibility convertVisibility(String cover)
-	{
-		if (cover.contains("< 1/2 miles" )) return Visibility.V1;
-		if (cover.contains("1/2 - < 1 miles")) return Visibility.V2;
-		if (cover.contains("1 - < 2 miles")) return Visibility.V3;
-		if (cover.contains("2 - < 3 miles")) return Visibility.V4;
-		if (cover.contains("3 - 5 miles")) return Visibility.V5;
-		if (cover.contains("6 miles")) return Visibility.V6;
-		if (cover.contains("> 6 miles")) return Visibility.V7;
-		return Visibility.UNKNOWN;
-	}
 	
 	/**
 	 * Subclass for Period information
@@ -324,6 +325,11 @@ public class MavData
 		/** Ceiling altitude */
 		public String ceiling;
 
+		private final TimeZone timeZone = TimeZone.getTimeZone("GMT");
+
+		@SuppressLint("SimpleDateFormat")
+		private final SimpleDateFormat sdfMETAR = new SimpleDateFormat("MMMMM dd HH:mm yyyy zzz");
+
 		/**
 		 * Constructor for empty Period data
 		 */
@@ -349,7 +355,7 @@ public class MavData
 			time = convertTime(date, hour);
 			temp = object.optString("temp");
 			dewpoint = object.optString("dewpoint");
-			cover = convertCover(object.optString("cover"));
+			cover = Cover.convert(object.optString("cover"));
 			wind = new Wind(object.getJSONObject("wind"));
 			pop6 = object.optString("pop6");
 			pop12 = object.optString("pop12");
@@ -361,16 +367,14 @@ public class MavData
 			pops = object.optString("pops");
 			type = object.optString("type");
 			snow = object.optString("snow");
-			visibility = convertVisibility(object.optString("visibility"));
+			visibility = Visibility.convert(object.optString("visibility"));
 			obscurity = object.optString("obscurity");
 			ceiling = object.optString("ceiling");
 		}
 
-		@SuppressLint("SimpleDateFormat")
 		private Date convertTime(String dateString, String hourString)
 		{
-			SimpleDateFormat sdfMETAR=new SimpleDateFormat("MMMMM dd HH:mm yyyy zzz");
-			Calendar currentDate=Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+			Calendar currentDate=Calendar.getInstance(timeZone);
 			
 			Date date = null;
 			try
