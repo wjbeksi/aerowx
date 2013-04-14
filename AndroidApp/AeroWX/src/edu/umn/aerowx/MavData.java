@@ -42,6 +42,13 @@ public class MavData
 	// * forecast periods */
 	public Period periods[];
 
+	/** Timezone for the Mav data (GMT) */
+	private static final TimeZone timeZone = TimeZone.getTimeZone("GMT");
+
+	/** Format of the date and time we get from the server. */
+	@SuppressLint("SimpleDateFormat")
+	private static final SimpleDateFormat sdfMETAR = new SimpleDateFormat("MMMMM dd HH:mm yyyy zzz");
+
 	/**
 	 * Constructor for empty GFSMOSMAVData
 	 */
@@ -324,11 +331,6 @@ public class MavData
 
 		/** Ceiling altitude */
 		public String ceiling;
-
-		private final TimeZone timeZone = TimeZone.getTimeZone("GMT");
-
-		@SuppressLint("SimpleDateFormat")
-		private final SimpleDateFormat sdfMETAR = new SimpleDateFormat("MMMMM dd HH:mm yyyy zzz");
 
 		/**
 		 * Constructor for empty Period data
