@@ -286,8 +286,8 @@
         android:id="@+id/gotogfs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/metarTitle"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:onClick="doForecast"
         android:text="@string/switchBut" />
 
