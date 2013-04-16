@@ -73,7 +73,11 @@ public class MavActivity extends Activity
 
 		((TextView) findViewById(R.id.station)).setText(gfs.wxid);
 
-		for (int i = 0; i < 4; ++i)
+		// Find number of rows available on this layout
+		TableRow row = (TableRow) findViewById(R.id.periodDate);
+		int columns=row.getVirtualChildCount(); 
+		
+		for (int i = 0; i < Math.min(columns-1, gfs.periods.length); ++i)
 		{
 			displayPeriod(i, gfs.periods[i]);
 		}

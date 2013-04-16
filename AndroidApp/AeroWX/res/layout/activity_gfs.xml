@@ -19,6 +19,18 @@
         android:textColor="#0000ff"
         android:textSize="17sp" />
 
+    <!-- Hide layout bug
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:text="rp"
+        android:textColor="#0000ff"
+        android:textSize="17sp" />
+    -->
+    
     <TextView
         android:id="@+id/stationLabel"
         android:layout_width="50dp"
